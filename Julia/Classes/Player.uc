@@ -202,6 +202,12 @@ var protected bool bWasDead;
 var protected float TimePlayed;
 
 /**
+ * Time in seconds this player has spent on the server
+ * @type float
+ */
+var protected float TimeTotal;
+
+/**
  * Current number of suicides (0)
  * @type int
  */
@@ -497,7 +503,12 @@ event Timer()
     }
     else
     {
-        self.TimePlayed += class'Core'.const.DELTA;
+        // Only count play time if the player is not a spec or view mode
+        if (!self.IsSpectator())
+        {
+            self.TimePlayed += class'Core'.const.DELTA;
+        }
+        self.TimeTotal += class'Core'.const.DELTA;
         // Weapon management (goes before the pawn check)
         self.CheckWeapon();
         // Stun management
@@ -1175,6 +1186,7 @@ public function ResetInstance()
     // Reset manually calculated stats
     self.Suicides = 0;
     self.TimePlayed = 0;
+    self.TimeTotal = 0;
     self.CharacterReports = 0;
     self.CivilianArrests = 0;
     self.EnemyArrests = 0;
@@ -1473,6 +1485,19 @@ public function bool WasAdmin()
 }
 
 /**
+ * Tell whether the player is in spec/view mode
+ * 
+ * @return  bool
+ */
+public function bool IsSpectator()
+{
+    return (
+        class'Julia.Utils'.static.IsAMEnabled(Level) &&
+        class'Julia.Utils'.static.IsSpectatorName(self.GetName())
+    );
+}
+
+/**
  * Return the current number of teamkills
  * 
  * @return  int
@@ -1752,6 +1777,16 @@ public function COOPStatus GetLastCOOPStatus()
 public function float GetTimePlayed()
 {
     return self.TimePlayed;
+}
+
+/**
+ * Return time the player has spent on the server
+ * 
+ * @return  float
+ */
+public function float GetTimeTotal()
+{
+    return self.TimeTotal;
 }
 
 /**

@@ -452,6 +452,23 @@ static function string GetTeamColoredName(string Name, int Team, optional bool b
     return "[c=FF0000]" $ Name $ "[\\c]";
 }
 
+/**
+ * Tell whether given name contains (SPEC) or (VIEW) suffix
+ * 
+ * @param   string Name
+ * @return  bool
+ */
+static function bool IsSpectatorName(string Name)
+{
+    switch (Right(Name, 6))
+    {
+        case "(SPEC)":
+        case "(VIEW)":
+            return true;
+    }
+    return false;
+}
+
 defaultproperties
 {
     MapFile(0)="ABomb";
