@@ -104,7 +104,7 @@ To register a command you have to the following:
     Dispatcher.Unbind("mycommand", self);
     Dispatcher.Unbind("myothercommand", self);
 
-     or
+   or
 
    ::
 
