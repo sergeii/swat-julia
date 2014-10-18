@@ -704,7 +704,7 @@ defaultproperties
 {
     CommandIdLength=8;
     CommandThreshold=3.0;
-    CommandTimeout=2.0;
+    CommandTimeout=3.0;
 }
 
 /* vim: set ft=java: */
