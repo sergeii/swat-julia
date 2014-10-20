@@ -179,6 +179,21 @@ static function HandheldEquipment GetActiveItem(Pawn Pawn)
     return None;
 }
 
+
+/**
+ * Tell whether there are any admins on the server
+ * 
+ * @param   class'Engine.LevelInfo' Level
+ * @return  bool
+ */
+static function bool AnyAdminsOnServer(Engine.LevelInfo Level)
+{
+    local array<PlayerController> Admins;
+
+    Admins = class'Utils.LevelUtils'.static.GetAdmins(Level);
+    return Admins.Length > 0;
+}
+
 /**
  * Tell whether AdminMod is installed on the server
  *
