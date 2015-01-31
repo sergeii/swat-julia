@@ -1,3 +1,8 @@
+2.2.0 (2014-01-31)
+
+* Added custom maps. Thanks to ||ESA||RIddIcK.
+
+
 2.1.0 (2014-10-18)
 
 * Time spent in spectator/view mode is longer counted against players' play time.
