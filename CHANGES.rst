@@ -1,3 +1,10 @@
+2.3.0 (2014-02-16)
+
+* Fix a bug where player scores would not be reset due to SWAT behavior on servers with 17 players or more.
+
+* Allow dispatched commands to be voided.
+
+
 2.2.0 (2014-01-31)
 
 * Added custom maps. Thanks to ||ESA||RIddIcK.
