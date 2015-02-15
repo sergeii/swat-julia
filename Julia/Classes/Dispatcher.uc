@@ -422,6 +422,27 @@ public function Respond(string Id, string Response)
 }
 
 /**
+ * Abort a command.
+ *
+ * @param   string Id
+ *          Command response id
+ * @return  void
+ */
+public function Void(string Id)
+{
+    local int i;
+
+    i = self.GetDispatchedCommandById(Id);
+
+    if (i == -1 || self.DispatchedCommands[i].bReplied)
+    {
+        return;
+    }
+
+    self.DispatchedCommands[i].bReplied = true;
+}
+
+/**
  * Attempt to dispatch a player command
  * 
  * @param   string CommandName
