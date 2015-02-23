@@ -57,7 +57,7 @@ env.server = {
 }
 
 env.dist = {
-    'version': '2.3.0',
+    'version': '2.3.1',
     'extra': (
         env.paths['here'].child('LICENSE'),
         env.paths['here'].child('README.html'),

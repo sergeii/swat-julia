@@ -1,3 +1,8 @@
+2.3.1 (2014-02-24)
+
+* Enforce player score reset upon a round start rather than its end.
+
+
 2.3.0 (2014-02-16)
 
 * Fix a bug where player scores would not be reset due to SWAT behavior on servers with 17 players or more.
