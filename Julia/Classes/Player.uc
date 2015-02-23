@@ -1179,9 +1179,6 @@ public function ResetInstance()
 
     log(self $ ".ResetInstance() has been invoked");
 
-    // Fix for 16+ servers
-    SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.ResetForMPQuickRestart();
-
     self.LastFiredWeapon = None;
     // Reset the player's VIP status, 
     // so the OnPlayerVIPSet event is properly triggered on a round start

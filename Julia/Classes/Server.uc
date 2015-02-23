@@ -5,7 +5,8 @@ class Server extends SwatGame.SwatMutator
             IInterested_GameEvent_PawnArrested,
             IInterested_GameEvent_ReportableReportedToTOC,
             IInterested_GameEvent_GrenadeDetonated,
-            InterestedInEventBroadcast;
+            InterestedInEventBroadcast,
+            InterestedInMissionStarted;
 
 /**
  * Copyright (c) 2014-2015 Sergei Khoroshilov <kh.sergei@gmail.com>
@@ -115,6 +116,7 @@ public function Init(Core Core)
     SwatGameInfo(Level.Game).GameEvents.ReportableReportedToTOC.Register(self);
 
     self.Core.RegisterInterestedInEventBroadcast(self);
+    self.Core.RegisterInterestedInMissionStarted(self);
 
     // Use custom tick rate
     self.SetTimer(class'Core'.const.DELTA, true);
@@ -409,6 +411,22 @@ public function bool OnEventBroadcast(Player Player, Actor Sender, name Type, st
             break;
     }
     return true;
+}
+
+/**
+ * Enforce player score reset (along with kills, deaths, etc) upon a round start.
+ * This is ought to fix a problem where scores are not properly reset on servers with 16+ players.
+ * 
+ * @return  void
+ */
+public function OnMissionStarted()
+{
+    local int i;
+
+    for (i = 0; i < self.Players.Length; i++)
+    {
+        SwatPlayerReplicationInfo(self.Players[i].GetPC().PlayerReplicationInfo).netScoreInfo.ResetForMPQuickRestart();
+    }
 }
 
 event Timer()
@@ -1050,6 +1068,7 @@ event Destroyed()
     SwatGameInfo(Level.Game).GameEvents.ReportableReportedToTOC.UnRegister(self);
 
     self.Core.UnregisterInterestedInEventBroadcast(self);
+    self.Core.UnregisterInterestedInMissionStarted(self);
     self.Core = None;
 
     while (self.Players.Length > 0)
