@@ -1,27 +1,5 @@
 class Locale extends Engine.Actor;
 
-/**
- * Copyright (c) 2014-2015 Sergei Khoroshilov <kh.sergei@gmail.com>
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
 var config string CoreVersionUsage;
 var config string CoreVersionDescription;
 
@@ -42,7 +20,7 @@ var config string DispatcherPermissionError;
 
 /**
  * Disable the Tick event
- * 
+ *
  * @return  void
  */
 public function PreBeginPlay()
@@ -53,7 +31,7 @@ public function PreBeginPlay()
 
 /**
  * Translate a property string
- * 
+ *
  * @param   string Property
  * @param   string Arg1 (optional)
  * @param   string Arg2 (optional)
@@ -64,10 +42,10 @@ public function PreBeginPlay()
  */
 public function string Translate(
     string Property,
-    optional coerce string Arg1, 
-    optional coerce string Arg2, 
-    optional coerce string Arg3, 
-    optional coerce string Arg4, 
+    optional coerce string Arg1,
+    optional coerce string Arg2,
+    optional coerce string Arg3,
+    optional coerce string Arg4,
     optional coerce string Arg5
 )
 {
@@ -100,5 +78,3 @@ defaultproperties
     DispatcherUsageError="You provided invalid arguments.\\nType [b]!%1 help[\\b] for more information on command usage.";
     DispatcherPermissionError="You don't have permissions to issue the [b]%1[\\b] command.";
 }
-
-/* vim: set ft=java: */

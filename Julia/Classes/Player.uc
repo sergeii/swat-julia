@@ -1,27 +1,5 @@
 class Player extends SwatGame.SwatMutator;
 
-/**
- * Copyright (c) 2014-2015 Sergei Khoroshilov <kh.sergei@gmail.com>
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
 import enum eVoiceType from SwatGame.SwatGUIConfig;
 import enum COOPStatus from SwatGame.SwatPlayerReplicationInfo;
 
@@ -63,7 +41,7 @@ struct sStun
 {
     /**
      * Stun type
-     * @type name 
+     * @type name
      */
     var name Type;
 
@@ -105,7 +83,7 @@ var protected array<sHit> Hits;
 var protected array<sStun> Stuns;
 
 /**
- * List of Weapon instances corresponding 
+ * List of Weapon instances corresponding
  * to equipment items the player has used since the level start
  * @type array<class'Weapon'>
  */
@@ -449,7 +427,7 @@ var protected float LastStungTime;
 
 /**
  * Set properties to their default values
- * 
+ *
  * @return  void
  */
 public function PreBeginPlay()
@@ -462,7 +440,7 @@ public function PreBeginPlay()
 
 /**
  * Initialize the instance
- * 
+ *
  * @param   class'Server' Server
  *          Reference to the server instance
  * @param   class'PlayerController' PC
@@ -552,7 +530,7 @@ protected function CheckWeapon()
 
     if (self.PC.Pawn != None)
     {
-        Pawn = self.PC.Pawn; 
+        Pawn = self.PC.Pawn;
     }
     // The player could have died but their weapon usage should still be updated
     else if (self.LastPawn != None)
@@ -579,7 +557,7 @@ protected function CheckWeapon()
 
 /**
  * Attempt to detect a change of the player's pawn
- * 
+ *
  * @return  void
  */
 protected function CheckPawn()
@@ -597,7 +575,7 @@ protected function CheckPawn()
 
 /**
  * Attempt to detect a change of the player's voice type
- * 
+ *
  * @return  void
  */
 protected function CheckVoiceType()
@@ -611,7 +589,7 @@ protected function CheckVoiceType()
 
 /**
  * Attempt to detect a change of team
- * 
+ *
  * @return  void
  */
 protected function CheckTeam()
@@ -625,7 +603,7 @@ protected function CheckTeam()
 
 /**
  * Attempt to detect a name change
- * 
+ *
  * @return  void
  */
 protected function CheckName()
@@ -644,7 +622,7 @@ protected function CheckName()
 
 /**
  * Check whether player has just joined game
- * 
+ *
  * @return  void
  */
 protected function CheckLoaded()
@@ -658,7 +636,7 @@ protected function CheckLoaded()
 
 /**
  * Check whether the player has just logged into admin
- * 
+ *
  * @return  void
  */
 protected function CheckAdmin()
@@ -672,7 +650,7 @@ protected function CheckAdmin()
 
 /**
  * Check whether the player has gained or lost VIP status since the last tick
- * 
+ *
  * @return  void
  */
 protected function CheckVIP()
@@ -693,7 +671,7 @@ protected function CheckVIP()
 
 /**
  * Save intermediate player stats
- * 
+ *
  * @return  void
  */
 protected function UpdateStats()
@@ -756,7 +734,7 @@ protected function UpdateStats()
     self.LastVIPKillsInvalid = self.GetVIPKillsInvalid();
     self.LastBombsDefused = self.GetBombsDefused();
     self.LastRDCryBaby = self.GetRDCryBaby();
-    
+
     #if IG_SPEECH_RECOGNITION
         self.LastSGCryBaby = self.GetSGCrybaby();
         self.LastSGEscapes = self.GetSGEscapes();
@@ -766,7 +744,7 @@ protected function UpdateStats()
 
 /**
  * Attempt to detect whether the player has recently been stunned
- * 
+ *
  * @return  void
  */
 protected function DetectStuns()
@@ -825,7 +803,7 @@ protected function DetectStuns()
 
 /**
  * Attempt to find players and their weapons that were the cause of every queued stun in the list
- * 
+ *
  * @return  void
  */
 protected function CheckStuns()
@@ -855,8 +833,8 @@ protected function CheckStuns()
         // Perform a lookup seeking for a player that has recently fired
         // with an item at/close to the stun time
         Damager = self.Server.GetPlayerByLastFiredWeapon(
-            class'Utils'.static.GetStunWeapons(self.Stuns[i].Type), 
-            self.Stuns[i].TimeStun, 
+            class'Utils'.static.GetStunWeapons(self.Stuns[i].Type),
+            self.Stuns[i].TimeStun,
             class'Utils'.static.GetHitPrecision(self.Stuns[i].Type)
         );
         if (Damager != None)
@@ -870,7 +848,7 @@ protected function CheckStuns()
                 continue;
             }
             log(self $ ": found damager for " $ self.Stuns[i].Type $ " stun of " $ self.GetName() $ " (" $ Damager.GetLastName() $ ", " $ DamagerWeapon.GetClassName() $ ")");
-            
+
             // Dont handle stuns if the player is arrested
             if (!NetPlayer(self.PC.Pawn).IsBeingArrestedNow() && !NetPlayer(self.PC.Pawn).IsArrested())
             {
@@ -911,7 +889,7 @@ protected function CheckStuns()
 
 /**
  * Attempt to detect a fired weapon for every registered pawn hit
- * 
+ *
  * @return  void
  */
 protected function CheckHits()
@@ -1003,7 +981,7 @@ protected function HandleHit(eHitType Type, Pawn Pawn, optional Weapon Weapon, o
 
 /**
  * Handle an injury hit
- * 
+ *
  * @param   class'Pawn' InjuredPawn
  * @param   class'Weapon' Weapon
  * @return  void
@@ -1064,7 +1042,7 @@ protected function HandleInjuryHit(Pawn InjuredPawn, Weapon Weapon)
 
 /**
  * Handle a hit that has led to a serious injury
- * 
+ *
  * @param   class'Pawn' InjuredPawn
  * @param   class'Weapon' Weapon
  * @param   bool bThreat
@@ -1089,7 +1067,7 @@ protected function HandleIncapHit(Pawn InjuredPawn, Weapon Weapon, optional bool
         else
         {
             self.IncrementEnemyIncapsInvalid();
-            // Trigger an internal event whenever the player 
+            // Trigger an internal event whenever the player
             // incapacitates a suspect without a reason
             self.Core.TriggerOnInternalEventBroadcast('PlayerEnemyIncapInvalid', Weapon.GetFriendlyName(), self);
         }
@@ -1100,7 +1078,7 @@ protected function HandleIncapHit(Pawn InjuredPawn, Weapon Weapon, optional bool
 
 /**
  * Handle a killing blow
- * 
+ *
  * @param   class'Pawn' VictimPawn
  * @param   class'Weapon' Weapon
  * @param   bool bThreat
@@ -1170,7 +1148,7 @@ protected function HandleKillHit(Pawn VictimPawn, Weapon Weapon, optional bool b
 
 /**
  * Reset the instance properties
- * 
+ *
  * @return  void
  */
 public function ResetInstance()
@@ -1180,7 +1158,7 @@ public function ResetInstance()
     log(self $ ".ResetInstance() has been invoked");
 
     self.LastFiredWeapon = None;
-    // Reset the player's VIP status, 
+    // Reset the player's VIP status,
     // so the OnPlayerVIPSet event is properly triggered on a round start
     self.bWasVIP = false;
     // Reset manually calculated stats
@@ -1234,7 +1212,7 @@ public function ResetInstance()
 
 /**
  * Keep the instance along with its game stats properties untill a proper destruction
- * 
+ *
  * @return  void
  */
 protected function PreserveInstance()
@@ -1255,7 +1233,7 @@ protected function PreserveInstance()
 
 /**
  * Return the PlayerController instance
- * 
+ *
  * @return  class'PlayerController'
  */
 public function PlayerController GetPC()
@@ -1265,7 +1243,7 @@ public function PlayerController GetPC()
 
 /**
  * Return the current Pawn
- * 
+ *
  * @return  class'Pawn'
  */
 public function Pawn GetPawn()
@@ -1275,7 +1253,7 @@ public function Pawn GetPawn()
 
 /**
  * Return the last saved Pawn instance
- * 
+ *
  * @return  class'Pawn'
  */
 public function Pawn GetLastPawn()
@@ -1285,7 +1263,7 @@ public function Pawn GetLastPawn()
 
 /**
  * Return the last saved non-None Pawn instance
- * 
+ *
  * @return  class'Pawn'
  */
 public function Pawn GetLastValidPawn()
@@ -1295,7 +1273,7 @@ public function Pawn GetLastValidPawn()
 
 /**
  * Return the reference to the last fired weapon
- * 
+ *
  * @return  class'Weapon'
  */
 public function Weapon GetLastFiredWeapon()
@@ -1305,7 +1283,7 @@ public function Weapon GetLastFiredWeapon()
 
 /**
  * Store a reference to the given Weapon as the last fired weapon
- * 
+ *
  * @param   class'Weapon' Weapon
  * @return  void
  */
@@ -1316,7 +1294,7 @@ public function SetLastFiredWeapon(Weapon Weapon)
 
 /**
  * Return the list of used weapons
- * 
+ *
  * @return  array<class'Weapon'>
  */
 public function array<Weapon> GetWeapons()
@@ -1326,7 +1304,7 @@ public function array<Weapon> GetWeapons()
 
 /**
  * Return the player's current voice type
- * 
+ *
  * @return  enum'eVoiceType'
  */
 public function eVoiceType GetVoiceType()
@@ -1340,7 +1318,7 @@ public function eVoiceType GetVoiceType()
 
 /**
  * Set the player's voicetype to VoiceType
- * 
+ *
  * @param   enum'eVoiceType' VoiceType
  *          New voicetype
  * @return  void
@@ -1357,7 +1335,7 @@ public function SetVoiceType(eVoiceType VoiceType)
 
 /**
  * Return the last saved voice type value
- * 
+ *
  * @return  enum'eVoiceType'
  */
 public function eVoiceType GetLastVoiceType()
@@ -1367,7 +1345,7 @@ public function eVoiceType GetLastVoiceType()
 
 /**
  * Return ip address of the player
- * 
+ *
  * @return  string
  */
 public function string GetIPAddr()
@@ -1377,7 +1355,7 @@ public function string GetIPAddr()
 
 /**
  * Return the player's team
- * 
+ *
  * @return  int
  */
 public function int GetTeam()
@@ -1387,7 +1365,7 @@ public function int GetTeam()
 
 /**
  * Return the player's last saved team
- * 
+ *
  * @return int
  */
 public function int GetLastTeam()
@@ -1397,7 +1375,7 @@ public function int GetLastTeam()
 
 /**
  * Return the player's name
- * 
+ *
  * @return  string
  */
 public function string GetName()
@@ -1407,7 +1385,7 @@ public function string GetName()
 
 /**
  * Return the last saved name
- * 
+ *
  * @return  string
  */
 public function string GetLastName()
@@ -1417,7 +1395,7 @@ public function string GetLastName()
 
 /**
  * Tell whether the player has dropped
- * 
+ *
  * @return  bool
  */
 public function bool WasDropped()
@@ -1427,7 +1405,7 @@ public function bool WasDropped()
 
 /**
  * Tell whether the player is dead
- * 
+ *
  * @return  bool
  */
 public function bool IsDead()
@@ -1437,7 +1415,7 @@ public function bool IsDead()
 
 /**
  * Tell whether the player was dead at the previous tick
- * 
+ *
  * @return  bool
  */
 public function bool WasDead()
@@ -1447,7 +1425,7 @@ public function bool WasDead()
 
 /**
  * Tell whether the player is the VIP
- * 
+ *
  * @return  bool
  */
 public function bool IsVIP()
@@ -1457,7 +1435,7 @@ public function bool IsVIP()
 
 /**
  * Tell whether the player wss the VIP the last time
- * 
+ *
  * @return  bool
  */
 public function bool WasVIP()
@@ -1467,7 +1445,7 @@ public function bool WasVIP()
 
 /**
  * Tell whether the player has joined game
- * 
+ *
  * @return  bool
  */
 public function bool HasLoaded()
@@ -1477,7 +1455,7 @@ public function bool HasLoaded()
 
 /**
  * Tell whether the player had joined the game at the last tick
- * 
+ *
  * @return  void
  */
 public function bool WasLoaded()
@@ -1487,7 +1465,7 @@ public function bool WasLoaded()
 
 /**
  * Tell whether the player is an admin
- * 
+ *
  * @return  bool
  */
 public function bool IsAdmin()
@@ -1497,7 +1475,7 @@ public function bool IsAdmin()
 
 /**
  * Tell whetther the player was an admin at the latest tick
- * 
+ *
  * @return  bool
  */
 public function bool WasAdmin()
@@ -1507,7 +1485,7 @@ public function bool WasAdmin()
 
 /**
  * Tell whether the player is in spec/view mode
- * 
+ *
  * @return  bool
  */
 public function bool IsSpectator()
@@ -1520,7 +1498,7 @@ public function bool IsSpectator()
 
 /**
  * Return the current number of teamkills
- * 
+ *
  * @return  int
  */
 public function int GetTeamKills()
@@ -1530,7 +1508,7 @@ public function int GetTeamKills()
 
 /**
  * Return the last saved number of teamkills
- * 
+ *
  * @return  int
  */
 public function int GetLastTeamKills()
@@ -1540,7 +1518,7 @@ public function int GetLastTeamKills()
 
 /**
  * Return the number of times arrested
- * 
+ *
  * @return  int
  */
 public function int GetArrested()
@@ -1550,7 +1528,7 @@ public function int GetArrested()
 
 /**
  * Return the last saved number of times arrested
- * 
+ *
  * @return  int
  */
 public function int GetLastArrested()
@@ -1560,7 +1538,7 @@ public function int GetLastArrested()
 
 /**
  * Return the number of VIP captures
- * 
+ *
  * @return  int
  */
 public function int GetVIPCaptures()
@@ -1570,7 +1548,7 @@ public function int GetVIPCaptures()
 
 /**
  * Return the last number of VIP captures
- * 
+ *
  * @return  int
  */
 public function int GetLastVIPCaptures()
@@ -1580,7 +1558,7 @@ public function int GetLastVIPCaptures()
 
 /**
  * Return the last number of vip rescues
- * 
+ *
  * @return  int
  */
 public function int GetVIPRescues()
@@ -1590,7 +1568,7 @@ public function int GetVIPRescues()
 
 /**
  * Return the last saved number of vip rescues
- * 
+ *
  * @return  int
  */
 public function int GetLastVIPRescues()
@@ -1600,7 +1578,7 @@ public function int GetLastVIPRescues()
 
 /**
  * Return the number of vip escapes
- * 
+ *
  * @return  int
  */
 public function int GetVIPEscapes()
@@ -1610,7 +1588,7 @@ public function int GetVIPEscapes()
 
 /**
  * Return the last saved number of vip escapes
- * 
+ *
  * @return  int
  */
 public function int GetLastVIPEscapes()
@@ -1620,7 +1598,7 @@ public function int GetLastVIPEscapes()
 
 /**
  * Return the number of valid VIP kills
- * 
+ *
  * @return  int
  */
 public function int GetVIPKillsValid()
@@ -1630,7 +1608,7 @@ public function int GetVIPKillsValid()
 
 /**
  * Return the last saved number of VIP kills
- * 
+ *
  * @return  int
  */
 public function int GetLastVIPKillsValid()
@@ -1640,7 +1618,7 @@ public function int GetLastVIPKillsValid()
 
 /**
  * Return the number of invalid VIP kills
- * 
+ *
  * @return  int
  */
 public function int GetVIPKillsInvalid()
@@ -1650,7 +1628,7 @@ public function int GetVIPKillsInvalid()
 
 /**
  * Return the last saved number of invalid VIP kills
- * 
+ *
  * @return  int
  */
 public function int GetLastVIPKillsInvalid()
@@ -1660,7 +1638,7 @@ public function int GetLastVIPKillsInvalid()
 
 /**
  * Return the number of defused bombs
- * 
+ *
  * @return  int
  */
 public function int GetBombsDefused()
@@ -1670,7 +1648,7 @@ public function int GetBombsDefused()
 
 /**
  * Return the last saved number of defused bombs
- * 
+ *
  * @return  int
  */
 public function int GetLastBombsDefused()
@@ -1680,7 +1658,7 @@ public function int GetLastBombsDefused()
 
 /**
  * Return the RD crybaby points (1)
- * 
+ *
  * @return  int
  */
 public function int GetRDCryBaby()
@@ -1690,7 +1668,7 @@ public function int GetRDCryBaby()
 
 /**
  * Return the last saved RD crybaby points
- * 
+ *
  * @return  int
  */
 public function int GetLastRDCryBaby()
@@ -1700,7 +1678,7 @@ public function int GetLastRDCryBaby()
 
 /**
  * Return the SG crybaby points (1)
- * 
+ *
  * @return  int
  */
 public function int GetSGCrybaby()
@@ -1714,7 +1692,7 @@ public function int GetSGCrybaby()
 
 /**
  * Return the last saved SG crybaby points
- * 
+ *
  * @return  int
  */
 public function int GetLastSGCryBaby()
@@ -1724,7 +1702,7 @@ public function int GetLastSGCryBaby()
 
 /**
  * Return the number of case escapes
- * 
+ *
  * @return  int
  */
 public function int GetSGEscapes()
@@ -1738,7 +1716,7 @@ public function int GetSGEscapes()
 
 /**
  * Return the last saved number of case escapes
- * 
+ *
  * @return  int
  */
 public function int GetLastSGEscapes()
@@ -1748,7 +1726,7 @@ public function int GetLastSGEscapes()
 
 /**
  * Return the number of case carrier kills
- * 
+ *
  * @return  int
  */
 public function int GetSGKills()
@@ -1762,7 +1740,7 @@ public function int GetSGKills()
 
 /**
  * Return the last saved number of case carrier kills
- * 
+ *
  * @return  int
  */
 public function int GetLastSGKills()
@@ -1772,7 +1750,7 @@ public function int GetLastSGKills()
 
 /**
  * Return the current player COOP status
- * 
+ *
  * @return  enum'COOPStatus'
  */
 public function COOPStatus GetCOOPStatus()
@@ -1782,7 +1760,7 @@ public function COOPStatus GetCOOPStatus()
 
 /**
  * Return the last saved coop status
- * 
+ *
  * @return  enum'COOPStatus'
  */
 public function COOPStatus GetLastCOOPStatus()
@@ -1792,7 +1770,7 @@ public function COOPStatus GetLastCOOPStatus()
 
 /**
  * Return the time played since the last reset
- * 
+ *
  * @return  float
  */
 public function float GetTimePlayed()
@@ -1802,7 +1780,7 @@ public function float GetTimePlayed()
 
 /**
  * Return time the player has spent on the server
- * 
+ *
  * @return  float
  */
 public function float GetTimeTotal()
@@ -1812,7 +1790,7 @@ public function float GetTimeTotal()
 
 /**
  * Return the player score
- * 
+ *
  * @return  int
  */
 public function int GetScore()
@@ -1822,7 +1800,7 @@ public function int GetScore()
 
 /**
  * Return the last saved score
- * 
+ *
  * @return  int
  */
 public function int GetLastScore()
@@ -1832,7 +1810,7 @@ public function int GetLastScore()
 
 /**
  * Return number of player kills
- * 
+ *
  * @return  int
  */
 public function int GetKills()
@@ -1842,7 +1820,7 @@ public function int GetKills()
 
 /**
  * Return last saved number of kills
- * 
+ *
  * @return  int
  */
 public function int GetLastKills()
@@ -1852,7 +1830,7 @@ public function int GetLastKills()
 
 /**
  * Return the number of arrests
- * 
+ *
  * @return  int
  */
 public function int GetArrests()
@@ -1862,7 +1840,7 @@ public function int GetArrests()
 
 /**
  * Return the last saved number of arrests
- * 
+ *
  * @return  int
  */
 public function int GetLastArrests()
@@ -1872,7 +1850,7 @@ public function int GetLastArrests()
 
 /**
  * Return the current number of deaths
- * 
+ *
  * @return  int
  */
 public function int GetDeaths()
@@ -1882,7 +1860,7 @@ public function int GetDeaths()
 
 /**
  * Return the last saved number of deaths
- * 
+ *
  * @return  int
  */
 public function int GetLastDeaths()
@@ -1892,7 +1870,7 @@ public function int GetLastDeaths()
 
 /**
  * Return the number of suicides
- * 
+ *
  * @return  int
  */
 public function int GetSuicides()
@@ -1902,7 +1880,7 @@ public function int GetSuicides()
 
 /**
  * Increment suicide count
- * 
+ *
  * @return  void
  */
 public function IncrementSuicides()
@@ -1912,7 +1890,7 @@ public function IncrementSuicides()
 
 /**
  * Return the number of reported characters
- * 
+ *
  * @return  int
  */
 public function int GetCharacterReports()
@@ -1922,7 +1900,7 @@ public function int GetCharacterReports()
 
 /**
  * Increment the reported characters count
- * 
+ *
  * @return  void
  */
 public function IncrementCharacterReports()
@@ -1932,7 +1910,7 @@ public function IncrementCharacterReports()
 
 /**
  * Return the number of civlian arrests
- * 
+ *
  * @return  int
  */
 public function int GetCivilianArrests()
@@ -1942,7 +1920,7 @@ public function int GetCivilianArrests()
 
 /**
  * Increment the civilian arrests count
- * 
+ *
  * @return  void
  */
 public function IncrementCivilianArrests()
@@ -1952,7 +1930,7 @@ public function IncrementCivilianArrests()
 
 /**
  * Get the number of civilian hits
- * 
+ *
  * @return  int
  */
 public function int GetCivilianHits()
@@ -1962,7 +1940,7 @@ public function int GetCivilianHits()
 
 /**
  * Increment the civilian hits counter
- * 
+ *
  * @return  void
  */
 public function IncrementCivilianHits()
@@ -1972,7 +1950,7 @@ public function IncrementCivilianHits()
 
 /**
  * Return the number of civilian incaps
- * 
+ *
  * @return  int
  */
 public function int GetCivilianIncaps()
@@ -1982,7 +1960,7 @@ public function int GetCivilianIncaps()
 
 /**
  * Increment the civilian incaps counter
- * 
+ *
  * @return  void
  */
 public function IncrementCivilianIncaps()
@@ -1992,7 +1970,7 @@ public function IncrementCivilianIncaps()
 
 /**
  * Retur the number of civilian kills
- * 
+ *
  * @return  int
  */
 public function int GetCivilianKills()
@@ -2002,7 +1980,7 @@ public function int GetCivilianKills()
 
 /**
  * Increment the civilian kills counter
- * 
+ *
  * @return  void
  */
 public function IncrementCivilianKills()
@@ -2012,7 +1990,7 @@ public function IncrementCivilianKills()
 
 /**
  * Return the number of enemy (AI suspects) arrests
- * 
+ *
  * @return  int
  */
 public function int GetEnemyArrests()
@@ -2022,7 +2000,7 @@ public function int GetEnemyArrests()
 
 /**
  * Increment the enemy arrests counter
- * 
+ *
  * @return  void
  */
 public function IncrementEnemyArrests()
@@ -2032,7 +2010,7 @@ public function IncrementEnemyArrests()
 
 /**
  * Return the number of enemy incaps (valid)
- * 
+ *
  * @return  int
  */
 public function int GetEnemyIncaps()
@@ -2042,7 +2020,7 @@ public function int GetEnemyIncaps()
 
 /**
  * Increment the enemy incaps counter
- * 
+ *
  * @return  void
  */
 public function IncrementEnemyIncaps()
@@ -2052,7 +2030,7 @@ public function IncrementEnemyIncaps()
 
 /**
  * Return the number of enemy invalid incaps
- * 
+ *
  * @return  int
  */
 public function int GetEnemyIncapsInvalid()
@@ -2062,7 +2040,7 @@ public function int GetEnemyIncapsInvalid()
 
 /**
  * Increment the enemy invalid incaps counter
- * 
+ *
  * @return  void
  */
 public function IncrementEnemyIncapsInvalid()
@@ -2072,7 +2050,7 @@ public function IncrementEnemyIncapsInvalid()
 
 /**
  * Return the number of AI enemy kills
- * 
+ *
  * @return  int
  */
 public function int GetEnemyKills()
@@ -2082,7 +2060,7 @@ public function int GetEnemyKills()
 
 /**
  * Incremement the enemy kills counter
- * 
+ *
  * @return  void
  */
 public function IncrementEnemyKills()
@@ -2092,7 +2070,7 @@ public function IncrementEnemyKills()
 
 /**
  * Return the number of enemy invalid kills
- * 
+ *
  * @return  int
  */
 public function int GetEnemyKillsInvalid()
@@ -2102,7 +2080,7 @@ public function int GetEnemyKillsInvalid()
 
 /**
  * Increment the invalid enemy kills counter
- * 
+ *
  * @return  void
  */
 public function IncrementEnemyKillsInvalid()
@@ -2112,7 +2090,7 @@ public function IncrementEnemyKillsInvalid()
 
 /**
  * Return the current killstreak (since the last death)
- * 
+ *
  * @return  int
  */
 public function int GetCurrentKillStreak()
@@ -2122,7 +2100,7 @@ public function int GetCurrentKillStreak()
 
 /**
  * Return the best kill streak
- * 
+ *
  * @return  int
  */
 public function int GetBestKillStreak()
@@ -2132,7 +2110,7 @@ public function int GetBestKillStreak()
 
 /**
  * Return the current arrest streak (since the last death)
- * 
+ *
  * @return  int
  */
 public function int GetCurrentArrestStreak()
@@ -2142,7 +2120,7 @@ public function int GetCurrentArrestStreak()
 
 /**
  * Return the best arrest strreak
- * 
+ *
  * @return  int
  */
 public function int GetBestArrestStreak()
@@ -2152,7 +2130,7 @@ public function int GetBestArrestStreak()
 
 /**
  * Return the current death streak (since the last kill/arrest)
- * 
+ *
  * @return  int
  */
 public function int GetCurrentDeathStreak()
@@ -2162,7 +2140,7 @@ public function int GetCurrentDeathStreak()
 
 /**
  * Return the best death streak
- * 
+ *
  * @return  int
  */
 public function int GetBestDeathStreak()
@@ -2172,7 +2150,7 @@ public function int GetBestDeathStreak()
 
 /**
  * Return a Weapon class instance corresponding to the given weapon class name
- * 
+ *
  * @param   string ClassName
  *          Weapon class name (e.g. M4A1MG)
  * @param   optional bool bForceCreate
@@ -2199,7 +2177,7 @@ public function Weapon GetWeaponByClassName(coerce string ClassName, optional bo
 
 /**
  * Create a new Weapon instance according to the given weapon class name
- * 
+ *
  * @param   string ClassName
  * @return  class'Weapon'
  */
@@ -2217,8 +2195,8 @@ protected function Weapon CreateWeapon(string ClassName)
 }
 
 /**
- * Queue a pawn hit 
- * 
+ * Queue a pawn hit
+ *
  * @param   class'Pawn' Pawn
  *          Pawn instance of the hit actor
  * @param   name Type
@@ -2243,7 +2221,7 @@ public function QueueHit(Pawn Pawn, eHitType Type, optional bool bThreat)
 
 /**
  * Tell whether the given pawn was already hit at this moment
- * 
+ *
  * @param   class'Pawn' Pawn
  * @param   name Type
  * @return  bool
@@ -2264,7 +2242,7 @@ public function bool HasAlreadyHit(Pawn Pawn, eHitType Type)
 
 /**
  * Queue a new stun of the type Type
- * 
+ *
  * @param   name Type
  * @return  void
  */
@@ -2282,7 +2260,7 @@ protected function QueueStun(name Type)
 
 /**
  * Tell whether the player has already been stun by Damager who last fired at given Time
- * 
+ *
  * @param   name Type
  * @param   class'Player' Damager
  * @param   float Time
@@ -2304,7 +2282,7 @@ protected function bool HasAlreadyBeenStun(name Type, Player Damager, float Time
 
 /**
  * Tell whether the given Player instance belongs to an enemy player
- * 
+ *
  * @param   class'Player' Other
  * @return  bool
  */
@@ -2352,5 +2330,3 @@ event Destroyed()
 
     Super.Destroyed();
 }
-
-/* vim: set ft=java: */

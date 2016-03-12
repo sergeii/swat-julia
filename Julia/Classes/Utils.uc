@@ -1,29 +1,7 @@
 class Utils extends Engine.Actor;
 
 /**
- * Copyright (c) 2014-2015 Sergei Khoroshilov <kh.sergei@gmail.com>
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-/**
- * List of map filenames (without extension) 
+ * List of map filenames (without extension)
  * corresponding to their respective titles from the MapTitle array
  * @example "Courthouse", "JewelryHeist"
  * @type array<string>
@@ -166,7 +144,7 @@ var array<float> HitPrecision_TripleBaton;
 
 /**
  * Return the Pawn's active item
- * 
+ *
  * @param   class'Pawn' Pawn
  * @return  class'HandheldEquipment'
  */
@@ -182,7 +160,7 @@ static function HandheldEquipment GetActiveItem(Pawn Pawn)
 
 /**
  * Tell whether there are any admins on the server
- * 
+ *
  * @param   class'Engine.LevelInfo' Level
  * @return  bool
  */
@@ -211,7 +189,7 @@ static function bool IsAMEnabled(Engine.LevelInfo Level)
  *
  * @param   class'LevelInfo' Level
  *          Reference to the current Level instance
- * @param   string Cmd 
+ * @param   string Cmd
  *          Admin command
  * @param   string AdminName
  *          Admin name the command should be issued with
@@ -234,7 +212,7 @@ static function bool AdminModCommand(Engine.LevelInfo Level, string Cmd, string 
 
 /**
  * Return ammo count for the given FiredWeapon instance
- * 
+ *
  * @return  int
  */
 static function int GetAmmoCount(FiredWeapon FiredWeapon)
@@ -253,14 +231,14 @@ static function int GetAmmoCount(FiredWeapon FiredWeapon)
 
 /**
  * Tell whether the given PlayerController instance belongs to an online player
- * 
+ *
  * @param   class'PlayerController' PC
  * @return  bool
  */
 static function bool IsOnlinePlayer(Engine.LevelInfo Level, PlayerController PC)
 {
     return (
-        PC != None && 
+        PC != None &&
         SwatGamePlayerController(PC) != None &&
         (NetConnection(PC.Player) != None || PC == Level.GetLocalPlayerController()) &&
         SwatGamePlayerController(PC).SwatRepoPlayerItem != None
@@ -269,7 +247,7 @@ static function bool IsOnlinePlayer(Engine.LevelInfo Level, PlayerController PC)
 
 /**
  * Return filename of the map next in the rotation list
- * 
+ *
  * @return  string
  */
 static function string GetNextMap(Engine.LevelInfo Level)
@@ -287,7 +265,7 @@ static function string GetNextMap(Engine.LevelInfo Level)
 
 /**
  * Return friendly map name for the given filename
- * 
+ *
  * @param   string Filename
  * @return  string
  */
@@ -319,7 +297,7 @@ static function string GetFriendlyMapName(coerce string Filename)
 
 /**
  * Return grenade class name corresponding to the given projectile class name
- * 
+ *
  * @param   string ProjectileClassName
  * @return  string
  */
@@ -328,18 +306,18 @@ static function string GetGrenadeClassName(coerce string ProjectileClassName)
     local int i;
 
     i = class'Utils.ArrayUtils'.static.Search(class'Utils'.default.GrenadeProjectileClass, ProjectileClassName, true);
-    
+
     if (i >= 0)
     {
         return default.GrenadeClass[i];
     }
-    
+
     return ProjectileClassName;
 }
 
 /**
  * Return whether the given equipment item class name belongs to the grenade list
- * 
+ *
  * @param   string ItemName
  * @return  bool
  */
@@ -350,7 +328,7 @@ static function bool IsGrenade(string ItemName)
 
 /**
  * Return the equipment item class name corresponding to its equipment item class name
- * 
+ *
  * @param   string ItemClassName
  * @return  string
  */
@@ -370,7 +348,7 @@ static function string GetItemFriendlyName(coerce string ItemClassName)
 
 /**
  * Remove unsafe characters from a string
- * 
+ *
  * @param   string String
  * @return  string
  */
@@ -388,7 +366,7 @@ static function string EscapeString(string String)
 
 /**
  * Return hit precision error for the given weapon category
- *  
+ *
  * @param   name Type
  * @return  array<float[2]>
  */
@@ -421,7 +399,7 @@ static function array<float> GetHitPrecision(name Type)
 
 /**
  * Return an array of stun weapons corresponding to the given stun type
- * 
+ *
  * @param   name Type
  * @return  array<string>
  */
@@ -481,7 +459,7 @@ static function string GetTeamColoredName(string Name, int Team, optional bool b
 
 /**
  * Tell whether given name contains (SPEC) or (VIEW) suffix
- * 
+ *
  * @param   string Name
  * @return  bool
  */
@@ -931,7 +909,7 @@ defaultproperties
     EquipmentClass(30)="C2Charge";                      // C2
     EquipmentClass(31)="detonator";                     // The Detonator
     EquipmentClass(32)="Cuffs";                         // Zip-cuffs
-    EquipmentClass(33)="IAmCuffed";                     // 
+    EquipmentClass(33)="IAmCuffed";                     //
     EquipmentClass(34)="ColtAccurizedRifle";            // Colt Accurized Rifle
     EquipmentClass(35)="HK69GrenadeLauncher";           // 40mm Grenade Launcher
     EquipmentClass(36)="SAWMG";                         // 5.56mm Light Machine Gun
@@ -1034,5 +1012,3 @@ defaultproperties
     HitPrecision_Spray=(0.0,0.0);
     HitPrecision_TripleBaton=(0.0,1.5);
 }
-
-/* vim: set ft=java: */

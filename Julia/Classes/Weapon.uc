@@ -1,28 +1,6 @@
 class Weapon extends SwatGame.SwatMutator;
 
 /**
- * Copyright (c) 2014-2015 Sergei Khoroshilov <kh.sergei@gmail.com>
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-/**
  * Reference to the weapon owner
  * @type class'Player'
  */
@@ -90,7 +68,7 @@ var protected int LastAmmoCount;
 
 /**
  * Disable the Tick event
- * 
+ *
  * @return  void
  */
 public function PreBeginPlay()
@@ -101,7 +79,7 @@ public function PreBeginPlay()
 
 /**
  * Initialize the instance
- * 
+ *
  * @param   class'Player' Player
  *          Reference to the owner
  * @return  void
@@ -115,7 +93,7 @@ public function Init(Player Player)
 
 /**
  * Update weapon usage details
- * 
+ *
  * @param   float Delta
  *          Tick rate
  * @param   class'FiredWeapon' FiredWeapon
@@ -146,7 +124,7 @@ public function Update(float Delta, optional FiredWeapon FiredWeapon)
 
 /**
  * Reset weapon usage details
- * 
+ *
  * @return  void
  */
 public function ResetInstance()
@@ -165,7 +143,7 @@ public function ResetInstance()
 
 /**
  * Preserve the instance for further destruction but keep its stat properties
- * 
+ *
  * @return  void
  */
 public function PreserveInstance()
@@ -177,7 +155,7 @@ public function PreserveInstance()
 
 /**
  * Return the last firing time
- * 
+ *
  * @return  float
  */
 public function float GetLastFiredTime()
@@ -187,7 +165,7 @@ public function float GetLastFiredTime()
 
 /**
  * Attempt to set a new kill distance record
- * 
+ *
  * @param   float Distance
  * @return  void
  */
@@ -201,7 +179,7 @@ public function CheckKillDistance(float Distance)
 
 /**
  * Return the best kill distance value
- * 
+ *
  * @return  float
  */
 public function float GetBestKillDistance()
@@ -211,7 +189,7 @@ public function float GetBestKillDistance()
 
 /**
  * Return the weapon class name
- * 
+ *
  * @return  string
  */
 public function string GetClassName()
@@ -221,7 +199,7 @@ public function string GetClassName()
 
 /**
  * Return the weapon's friendly name (such as 9mm SMG or Colt M4A1 Carbine)
- * 
+ *
  * @return  string
  */
 public function string GetFriendlyName()
@@ -231,7 +209,7 @@ public function string GetFriendlyName()
 
 /**
  * Tell whether the instance weapon belongs to the grenade class
- * 
+ *
  * @return bool
  */
 public function bool IsGrenade()
@@ -241,7 +219,7 @@ public function bool IsGrenade()
 
 /**
  * Return the time in use value
- * 
+ *
  * @return  float
  */
 public function float GetTimeUsed()
@@ -251,7 +229,7 @@ public function float GetTimeUsed()
 
 /**
  * Return the number of ammo fired
- * 
+ *
  * @return  int
  */
 public function int GetShots()
@@ -261,7 +239,7 @@ public function int GetShots()
 
 /**
  * Return the number of weapon enemy hits
- * 
+ *
  * @return  int
  */
 public function int GetHits()
@@ -271,7 +249,7 @@ public function int GetHits()
 
 /**
  * Return the number of team hits performed with the weapon
- * 
+ *
  * @return  int
  */
 public function int GetTeamHits()
@@ -281,7 +259,7 @@ public function int GetTeamHits()
 
 /**
  * Return the number of kills performed with the weapon
- * 
+ *
  * @return  int
  */
 public function int GetKills()
@@ -291,7 +269,7 @@ public function int GetKills()
 
 /**
  * Return the number of teamkills performed with the weapon
- * 
+ *
  * @return  int
  */
 public function int GetTeamKills()
@@ -301,7 +279,7 @@ public function int GetTeamKills()
 
 /**
  * Set the weapon class name (e.g. M4A1MG)
- * 
+ *
  * @param   string Name
  * @return  void
  */
@@ -312,7 +290,7 @@ public function SetClassName(string Name)
 
 /**
  * Increment the number of shots fired
- * 
+ *
  * @return  void
  */
 public function IncrementHits()
@@ -322,7 +300,7 @@ public function IncrementHits()
 
 /**
  * Increment the teamhits property
- * 
+ *
  * @return  void
  */
 public function IncrementTeamHits()
@@ -332,7 +310,7 @@ public function IncrementTeamHits()
 
 /**
  * Incremenent the weapon kills property
- * 
+ *
  * @return  void
  */
 public function IncrementKills()
@@ -342,7 +320,7 @@ public function IncrementKills()
 
 /**
  * Increment the TeamKills property
- * 
+ *
  * @return  void
  */
 public function IncrementTeamKills()
@@ -374,5 +352,3 @@ event Destroyed()
 
     Super.Destroyed();
 }
-
-/* vim: set ft=java: */

@@ -2,28 +2,6 @@ class Core extends SwatGame.SwatMutator
  implements InterestedInMissionEnded,
             InterestedInCommandDispatched;
 
-/**
- * Copyright (c) 2014-2015 Sergei Khoroshilov <kh.sergei@gmail.com>
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
 import enum eSwatGameState from SwatGame.SwatGUIConfig;
 
 /**
@@ -70,98 +48,98 @@ var protected Server Server;
 
 /**
  * List of the OnEventBroadcast signal listeners
- * 
+ *
  * @type array<interface'InterestedInEventBroadcast'>
  */
 var protected array<InterestedInEventBroadcast> InterestedInEventBroadcast;
 
 /**
  * List of the OnInternalEventBroadcast signal listeners
- * 
+ *
  * @type array<interface'InterestedInInternalEventBroadcast'>
  */
 var protected array<InterestedInInternalEventBroadcast> InterestedInInternalEventBroadcast;
 
 /**
  * List of the OnGameStateChanged signal listeners
- * 
+ *
  * @type array<interface'InterestedInGameStateChanged'>
  */
 var protected array<InterestedInGameStateChanged> InterestedInGameStateChanged;
 
 /**
  * List of the OnMissionStarted signal listeners
- * 
+ *
  * @type array<interface'InterestedInMissionStarted'>
  */
 var protected array<InterestedInMissionStarted> InterestedInMissionStarted;
 
 /**
  * List of the OnMissionEnded signal listeners
- * 
+ *
  * @type array<interface'InterestedInMissionEnded'>
  */
 var protected array<InterestedInMissionEnded> InterestedInMissionEnded;
 
 /**
  * List of the OnPlayerConnected signal listeners
- * 
+ *
  * @type array<interface'InterestedInPlayerConnected'>
  */
 var protected array<InterestedInPlayerConnected> InterestedInPlayerConnected;
 
 /**
  * List of the OnPlayerDisonnected signal listeners
- * 
+ *
  * @type array<interface'InterestedInPlayerDisonnected'>
  */
 var protected array<InterestedInPlayerDisconnected> InterestedInPlayerDisconnected;
 
 /**
  * List of the OnPlayerLoaded signal listeners
- * 
+ *
  * @type array<interface'InterestedInPlayerLoaded'>
  */
 var protected array<InterestedInPlayerLoaded> InterestedInPlayerLoaded;
 
 /**
  * List of the OnPlayerAdminLogged signal listeners
- * 
+ *
  * @type array<interface'InterestedInPlayerAdminLogged'>
  */
 var protected array<InterestedInPlayerAdminLogged> InterestedInPlayerAdminLogged;
 
 /**
  * List of the OnPlayerNameChanged signal listeners
- * 
+ *
  * @type array<interface'InterestedInPlayerNameChanged'>
  */
 var protected array<InterestedInPlayerNameChanged> InterestedInPlayerNameChanged;
 
 /**
  * List of the OnPlayerTeamSwitched signal listeners
- * 
+ *
  * @type array<interface'InterestedInPlayerTeamSwitched'>
  */
 var protected array<InterestedInPlayerTeamSwitched> InterestedInPlayerTeamSwitched;
 
 /**
  * List of the OnPlayerVIPSet signal listeners
- * 
+ *
  * @type array<interface'InterestedInPlayerVIPSet'>
  */
 var protected array<InterestedInPlayerVIPSet> InterestedInPlayerVIPSet;
 
 /**
  * List of the OnPlayerPawnChanged signal listeners
- * 
+ *
  * @type array<interface'InterestedInPlayerPawnChanged'>
  */
 var protected array<InterestedInPlayerPawnChanged> InterestedInPlayerPawnChanged;
 
 /**
  * List of the OnPlayerVoiceChanged signal listeners
- * 
+ *
  * @type array<interface'InterestedInPlayerVoiceChanged'>
  */
 var protected array<InterestedInPlayerVoiceChanged> InterestedInPlayerVoiceChanged;
@@ -174,14 +152,14 @@ var config bool Enabled;
 
 /**
  * Don't let the class to be initialized under certain circumstances
- * 
+ *
  * @return  void
  */
 public function PreBeginPlay()
 {
     Super.PreBeginPlay();
     self.Disable('Tick');
-    
+
     if (Level.NetMode == NM_ListenServer || Level.NetMode == NM_DedicatedServer)
     {
         if (Level.Game != None && SwatGameInfo(Level.Game) != None)
@@ -197,7 +175,7 @@ public function PreBeginPlay()
 
 /**
  * Initialize the core instance
- * 
+ *
  * @return  void
  */
 public function BeginPlay()
@@ -221,7 +199,7 @@ public function BeginPlay()
 
 /**
  * Initialize Cache instance
- * 
+ *
  * @return void
  */
 protected function InitCache()
@@ -241,7 +219,7 @@ protected function InitLocale()
 
 /**
  * Initialize BroadcastHandler instance
- * 
+ *
  * @return  void
  */
 protected function InitBroadcastHandler()
@@ -252,7 +230,7 @@ protected function InitBroadcastHandler()
 
 /**
  * Initialize Dispatcher instance
- * 
+ *
  * @return  void
  */
 protected function InitDispatcher()
@@ -263,7 +241,7 @@ protected function InitDispatcher()
 
 /**
  * Initialize Server instance
- * 
+ *
  * @return  void
  */
 protected function InitServer()
@@ -274,7 +252,7 @@ protected function InitServer()
 
 /**
  * Store cache live (memory) data onto disk upon a round end
- * 
+ *
  * @return  void
  */
 public function OnMissionEnded()
@@ -283,8 +261,8 @@ public function OnMissionEnded()
 }
 
 /**
- * Reply with package version details 
- * 
+ * Reply with package version details
+ *
  * @see InterestedInCommandDispatched.OnCommandDispatched
  */
 public function OnCommandDispatched(Dispatcher Dispatcher, string Name, string Id, array<string> Args, Player Player)
@@ -295,7 +273,7 @@ public function OnCommandDispatched(Dispatcher Dispatcher, string Name, string I
     {
         case "version":
             Response = class'Utils.StringUtils'.static.Format(
-                "\"Julia\" mod by Serge (%1)\\nhttp://github.com/sergeii/swat-julia", 
+                "\"Julia\" mod by Serge (%1)\\nhttp://github.com/sergeii/swat-julia",
                 class'Core'.const.VERSION
             );
             break;
@@ -307,7 +285,7 @@ public function OnCommandDispatched(Dispatcher Dispatcher, string Name, string I
 
 /**
  * Return the cache instance
- * 
+ *
  * @return  class'Cache'
  */
 public function Cache GetCache()
@@ -317,7 +295,7 @@ public function Cache GetCache()
 
 /**
  * Return the Locale instance
- * 
+ *
  * @return  class'Locale'
  */
 public function Locale GetLocale()
@@ -327,7 +305,7 @@ public function Locale GetLocale()
 
 /**
  * Return the BroadcastHandler instance
- * 
+ *
  * @return  class'BroadcastHandler'
  */
 public function BroadcastHandler GetBroadcastHandler()
@@ -337,7 +315,7 @@ public function BroadcastHandler GetBroadcastHandler()
 
 /**
  * Return the Dispatcher instance
- * 
+ *
  * @return  class'Dispatcher'
  */
 public function Dispatcher GetDispatcher()
@@ -347,7 +325,7 @@ public function Dispatcher GetDispatcher()
 
 /**
  * Return the Server instance
- * 
+ *
  * @return  class'Server'
  */
 public function Server GetServer()
@@ -357,7 +335,7 @@ public function Server GetServer()
 
 /**
  * Return the list of player controllers
- * 
+ *
  * @return  array<class'Player'>
  */
 public function array<Player> GetPlayers()
@@ -367,7 +345,7 @@ public function array<Player> GetPlayers()
 
 /**
  * Register an InterestedInEventBroadcast instance with the OnEventBroadcast event signal handler
- * 
+ *
  * @param   interface'InterestedInEventBroadcast' Interested
  * @return  void
  */
@@ -378,7 +356,7 @@ public function RegisterInterestedInEventBroadcast(InterestedInEventBroadcast In
 
 /**
  * Unregister an InterestedInEventBroadcast instance from the OnEventBroadcast event signal handler
- * 
+ *
  * @param   interface'InterestedInEventBroadcast' Uninterested
  * @return  void
  */
@@ -434,7 +412,7 @@ public function bool TriggerOnEventBroadcast(Player Player, Actor Sender, name T
 
 /**
  * Register an InterestedInInternalEventBroadcast instance with the OnInternalEventBroadcast event signal handler
- * 
+ *
  * @param   interface'InterestedInInternalEventBroadcast' Interested
  * @return  void
  */
@@ -445,7 +423,7 @@ public function RegisterInterestedInInternalEventBroadcast(InterestedInInternalE
 
 /**
  * Unregister an InterestedInInternalEventBroadcast instance from the OnInternalEventBroadcast event signal handler
- * 
+ *
  * @param   interface'InterestedInInternalEventBroadcast' Uninterested
  * @return  void
  */
@@ -464,7 +442,7 @@ public function UnregisterInterestedInInternalEventBroadcast(InterestedInInterna
 
 /**
  * Trigger an OnInternalEventBroadcast signal
- * 
+ *
  * @param   name Type
  *          Event type
  * @param   string Message (optional)
@@ -489,7 +467,7 @@ public function TriggerOnInternalEventBroadcast(name Type, optional string Msg, 
 
 /**
  * Register an InterestedInGameStateChanged instance with the OnGameStateChanged event signal handler
- * 
+ *
  * @param   interface'InterestedInGameStateChanged' Interested
  * @return  void
  */
@@ -500,7 +478,7 @@ public function RegisterInterestedInGameStateChanged(InterestedInGameStateChange
 
 /**
  * Unregister an InterestedInGameStateChanged instance from the OnGameStateChanged event signal handler
- * 
+ *
  * @param   interface'InterestedInGameStateChanged' Uninterested
  * @return  void
  */
@@ -519,7 +497,7 @@ public function UnregisterInterestedInGameStateChanged(InterestedInGameStateChan
 
 /**
  * Trigger an OnGameStateChanged signal
- * 
+ *
  * @param   enum'ESwatGameState' OldState
  * @param   enum'ESwatGameState' NewState
  * @return  void
@@ -538,7 +516,7 @@ public function TriggerOnGameStateChanged(eSwatGameState OldState, eSwatGameStat
 
 /**
  * Register an InterestedInMissionStarted instance with the OnMissionStarted event signal handler
- * 
+ *
  * @param   interface'InterestedInMissionStarted' Interested
  * @return  void
  */
@@ -549,7 +527,7 @@ public function RegisterInterestedInMissionStarted(InterestedInMissionStarted In
 
 /**
  * Unregister an InterestedInMissionStarted instance from the OnMissionStarted event signal handler
- * 
+ *
  * @param   interface'InterestedInMissionStarted' Uninterested
  * @return  void
  */
@@ -568,7 +546,7 @@ public function UnregisterInterestedInMissionStarted(InterestedInMissionStarted 
 
 /**
  * Trigger an OnMissionStarted signal
- * 
+ *
  * @return  void
  */
 public function TriggerOnMissionStarted()
@@ -585,7 +563,7 @@ public function TriggerOnMissionStarted()
 
 /**
  * Register an InterestedInMissionEnded instance with the OnMissionEnded event signal handler
- * 
+ *
  * @param   interface'InterestedInMissionEnded' Interested
  * @return  void
  */
@@ -596,7 +574,7 @@ public function RegisterInterestedInMissionEnded(InterestedInMissionEnded Intere
 
 /**
  * Unregister an InterestedInMissionEnded instance from the OnMissionEnded event signal handler
- * 
+ *
  * @param   interface'InterestedInMissionEnded' Uninterested
  * @return  void
  */
@@ -615,7 +593,7 @@ public function UnregisterInterestedInMissionEnded(InterestedInMissionEnded Unin
 
 /**
  * Trigger an OnMissionEnded signal
- * 
+ *
  * @return  void
  */
 public function TriggerOnMissionEnded()
@@ -632,7 +610,7 @@ public function TriggerOnMissionEnded()
 
 /**
  * Register an InterestedInPlayerConnected instance with the OnPlayerConnected event signal handler
- * 
+ *
  * @param   interface'InterestedInPlayerConnected' Interested
  * @return  void
  */
@@ -643,7 +621,7 @@ public function RegisterInterestedInPlayerConnected(InterestedInPlayerConnected 
 
 /**
  * Unregister an InterestedInPlayerConnected instance from the OnPlayerConnected event signal handler
- * 
+ *
  * @param   interface'InterestedInPlayerConnected' Uninterested
  * @return  void
  */
@@ -662,7 +640,7 @@ public function UnregisterInterestedInPlayerConnected(InterestedInPlayerConnecte
 
 /**
  * Notify the OnPlayerConnected event listeners
- * 
+ *
  * @param   class'Player' Player
  *          Reference to the player controller of the connected player
  * @return  void
@@ -681,7 +659,7 @@ public function TriggerOnPlayerConnected(Player Player)
 
 /**
  * Register an InterestedInPlayerDisconnected instance with the OnPlayerDisconnected event signal handler
- * 
+ *
  * @param   interface'InterestedInPlayerDisconnected' Interested
  * @return  void
  */
@@ -692,7 +670,7 @@ public function RegisterInterestedInPlayerDisconnected(InterestedInPlayerDisconn
 
 /**
  * Unregister an InterestedInPlayerDisconnected instance from the OnPlayerDisconnected event signal handler
- * 
+ *
  * @param   interface'InterestedInPlayerDisconnected' Uninterested
  * @return  void
  */
@@ -711,7 +689,7 @@ public function UnregisterInterestedInPlayerDisconnected(InterestedInPlayerDisco
 
 /**
  * Notify the OnPlayerDisconnected event listeners
- * 
+ *
  * @param   class'Player' Player
  *          Reference to the player controller of the disconnected player
  * @return  void
@@ -730,7 +708,7 @@ public function TriggerOnPlayerDisconnected(Player Player)
 
 /**
  * Register an InterestedInPlayerLoaded instance with the OnPlayerLoaded event signal handler
- * 
+ *
  * @param   interface'InterestedInPlayerLoaded' Interested
  * @return  void
  */
@@ -741,7 +719,7 @@ public function RegisterInterestedInPlayerLoaded(InterestedInPlayerLoaded Intere
 
 /**
  * Unregister an InterestedInPlayerLoaded instance from the OnPlayerLoaded event signal handler
- * 
+ *
  * @param   interface'InterestedInPlayerLoaded' Uninterested
  * @return  void
  */
@@ -760,7 +738,7 @@ public function UnregisterInterestedInPlayerLoaded(InterestedInPlayerLoaded Unin
 
 /**
  * Trigger an OnPlayerLoaded signal
- * 
+ *
  * @param   class'Player' Player
  *          Reference to the player controller of the loaded player
  * @return  void
@@ -779,7 +757,7 @@ public function TriggerOnPlayerLoaded(Player Player)
 
 /**
  * Register an InterestedInPlayerAdminLogged instance with the OnPlayerAdminLogged event signal handler
- * 
+ *
  * @param   interface'InterestedInPlayerAdminLogged' Interested
  * @return  void
  */
@@ -790,7 +768,7 @@ public function RegisterInterestedInPlayerAdminLogged(InterestedInPlayerAdminLog
 
 /**
  * Unregister an InterestedInPlayerAdminLogged instance from the OnPlayerAdminLogged event signal handler
- * 
+ *
  * @param   interface'InterestedInPlayerAdminLogged' Uninterested
  * @return  void
  */
@@ -809,7 +787,7 @@ public function UnregisterInterestedInPlayerAdminLogged(InterestedInPlayerAdminL
 
 /**
  * Trigger an OnPlayerAdminLogged signal
- * 
+ *
  * @param   class'Player' Player
  *          Reference to the player controller of the logged in player
  * @return  void
@@ -828,7 +806,7 @@ public function TriggerOnPlayerAdminLogged(Player Player)
 
 /**
  * Register an InterestedInPlayerNameChanged instance with the OnPlayerNameChanged event signal handler
- * 
+ *
  * @param   interface'InterestedInPlayerNameChanged' Interested
  * @return  void
  */
@@ -839,7 +817,7 @@ public function RegisterInterestedInPlayerNameChanged(InterestedInPlayerNameChan
 
 /**
  * Unregister an InterestedInPlayerNameChanged instance from the OnPlayerNameChanged event signal handler
- * 
+ *
  * @param   interface'InterestedInPlayerNameChanged' Uninterested
  * @return  void
  */
@@ -858,7 +836,7 @@ public function UnregisterInterestedInPlayerNameChanged(InterestedInPlayerNameCh
 
 /**
  * Trigger a OnPlayerNameChanged signal
- * 
+ *
  * @param   class'Player' Player
  *          Reference to the player controller instance
  * @param   string OldName
@@ -879,7 +857,7 @@ public function TriggerOnPlayerNameChanged(Player Player, string OldName)
 
 /**
  * Register an InterestedInPlayerTeamSwitched instance with the OnPlayerTeamSwitched event signal handler
- * 
+ *
  * @param   interface'InterestedInPlayerTeamSwitched' Interested
  * @return  void
  */
@@ -890,7 +868,7 @@ public function RegisterInterestedInPlayerTeamSwitched(InterestedInPlayerTeamSwi
 
 /**
  * Unregister an InterestedInPlayerTeamSwitched instance from the OnPlayerTeamSwitched event signal handler
- * 
+ *
  * @param   interface'InterestedInPlayerTeamSwitched' Uninterested
  * @return  void
  */
@@ -909,7 +887,7 @@ public function UnregisterInterestedInPlayerTeamSwitched(InterestedInPlayerTeamS
 
 /**
  * Trigger an OnPlayerTeamSwitched signal
- * 
+ *
  * @param   class'Player' Player
  *          Reference to the player controller instance
  * @return  void
@@ -928,7 +906,7 @@ public function TriggerOnPlayerTeamSwitched(Player Player)
 
 /**
  * Register an InterestedInPlayerVIPSet instance with the OnPlayerVIPSet event signal handler
- * 
+ *
  * @param   interface'InterestedInPlayerVIPSet' Interested
  * @return  void
  */
@@ -939,7 +917,7 @@ public function RegisterInterestedInPlayerVIPSet(InterestedInPlayerVIPSet Intere
 
 /**
  * Unregister an InterestedInPlayerVIPSet instance from the OnPlayerVIPSet event signal handler
- * 
+ *
  * @param   interface'InterestedInPlayerVIPSet' Uninterested
  * @return  void
  */
@@ -958,7 +936,7 @@ public function UnregisterInterestedInPlayerVIPSet(InterestedInPlayerVIPSet Unin
 
 /**
  * Trigger an OnPlayerVIPSet signal
- * 
+ *
  * @param   class'Player' Player
  *          Reference to the player controller instance
  * @return  void
@@ -977,7 +955,7 @@ public function TriggerOnPlayerVIPSet(Player Player)
 
 /**
  * Register an InterestedInPlayerPawnChanged instance with the OnPlayerPawnChanged event signal handler
- * 
+ *
  * @param   interface'InterestedInPlayerPawnChanged' Interested
  * @return  void
  */
@@ -988,7 +966,7 @@ public function RegisterInterestedInPlayerPawnChanged(InterestedInPlayerPawnChan
 
 /**
  * Unregister an InterestedInPlayerPawnChanged instance from the OnPlayerPawnChanged event signal handler
- * 
+ *
  * @param   interface'InterestedInPlayerPawnChanged' Uninterested
  * @return  void
  */
@@ -1007,7 +985,7 @@ public function UnregisterInterestedInPlayerPawnChanged(InterestedInPlayerPawnCh
 
 /**
  * Trigger an OnPlayerPawnSpawned signal
- * 
+ *
  * @param   class'Player' Player
  *          Reference to the player controller instance
  * @return  void
@@ -1026,7 +1004,7 @@ public function TriggerOnPlayerPawnChanged(Player Player)
 
 /**
  * Register an InterestedInPlayerVoiceChanged instance with the OnPlayerVoiceChanged event signal handler
- * 
+ *
  * @param   interface'InterestedInPlayerVoiceChanged' Interested
  * @return  void
  */
@@ -1037,7 +1015,7 @@ public function RegisterInterestedInPlayerVoiceChanged(InterestedInPlayerVoiceCh
 
 /**
  * Unregister an InterestedInPlayerVoiceChanged instance from the OnPlayerVoiceChanged event signal handler
- * 
+ *
  * @param   interface'InterestedInPlayerVoiceChanged' Uninterested
  * @return  void
  */
@@ -1056,9 +1034,9 @@ public function UnregisterInterestedInPlayerVoiceChanged(InterestedInPlayerVoice
 
 /**
  * Trigger an OnPlayerVoiceChanged signal
- * 
+ *
  * @param   class'Player' Player
- *          Reference to the player controller instance 
+ *          Reference to the player controller instance
  * @return  void
  */
 public function TriggerOnPlayerVoiceChanged(Player Player)
@@ -1122,5 +1100,3 @@ event Destroyed()
 
     Super.Destroyed();
 }
-
-/* vim: set ft=java: */

@@ -8,28 +8,6 @@ class Server extends SwatGame.SwatMutator
             InterestedInEventBroadcast,
             InterestedInMissionStarted;
 
-/**
- * Copyright (c) 2014-2015 Sergei Khoroshilov <kh.sergei@gmail.com>
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
 import enum EMPMode from Engine.Repo;
 import enum eSwatGameState from SwatGame.SwatGUIConfig;
 
@@ -89,7 +67,7 @@ var protected eSwatGameState LastGameState;
 
 /**
  * Disable the Tick event
- * 
+ *
  * @return  void
  */
 public function PreBeginPlay()
@@ -161,7 +139,7 @@ public function OnPawnIncapacitated(Pawn Pawn, Actor Incapacitator, bool bThreat
 
 /**
  * Register a hit whenever a pawn gets injured
- * 
+ *
  * @param   class'Pawn' Pawn
  *          Pawn of the damaged actor
  * @param   class'Actor' Damager
@@ -216,7 +194,7 @@ public function OnPawnDamaged(Pawn Pawn, Actor Damager)
 
 /**
  * Register a hit whenether an actor gets killed
- * 
+ *
  * @param   class'Pawn' Pawn
  *          Reference to the Pawn object of the killed actor
  * @param   class'Actor' Killer
@@ -261,7 +239,7 @@ public function OnPawnDied(Pawn Pawn, Actor Killer, bool bThreat)
 
 /**
  * Register a TOC report
- * 
+ *
  * @param   interface'IAmReportableCharacter' ReportedCharacter
  * @param   class'Pawn' Reporter
  * @return  void
@@ -296,7 +274,7 @@ public function OnReportableReportedToTOC(IAmReportableCharacter ReportedCharact
 
 /**
  * Register an arrest performed by a player
- * 
+ *
  * @param   class'Pawn' Pawn
  *          Reference to the Pawn object of the arrested actor
  * @param   class'Pawn' Arrester
@@ -337,7 +315,7 @@ public function OnPawnArrested(Pawn Pawn, Pawn Arrester)
 
 /**
  * Register detonation of a grenade owned by a player
- * 
+ *
  * @param   class'Pawn' GrenadeOwner
  * @param   class'SwatGrenadeProjectile' Grenade
  * @return  void
@@ -363,7 +341,7 @@ public function OnGrenadeDetonated(Pawn GrenadeOwner, SwatGrenadeProjectile Gren
 
 /**
  * Attempt to set the round outcome
- * 
+ *
  * @see  InterestedInEventBroadacast.OnEventBroadcast
  */
 public function bool OnEventBroadcast(Player Player, Actor Sender, name Type, string Msg, optional PlayerController Receiver, optional bool bHidden)
@@ -416,7 +394,7 @@ public function bool OnEventBroadcast(Player Player, Actor Sender, name Type, st
 /**
  * Enforce player score reset (along with kills, deaths, etc) upon a round start.
  * This is ought to fix a problem where scores are not properly reset on servers with 16+ players.
- * 
+ *
  * @return  void
  */
 public function OnMissionStarted()
@@ -445,7 +423,7 @@ event Timer()
 
 /**
  * Attempt to detect a game state change
- * 
+ *
  * @return  void
  */
 protected function CheckGameState()
@@ -478,7 +456,7 @@ protected function CheckGameState()
 
 /**
  * Attempt to detect new players that havent been yet added to the internal player list
- * 
+ *
  * @return  void
  */
 protected function CheckPlayers()
@@ -499,7 +477,7 @@ protected function CheckPlayers()
 
 /**
  * Reset the instance gamestate-related properties
- * 
+ *
  * @return  void
  */
 protected function ResetInstance()
@@ -530,7 +508,7 @@ protected function ResetInstance()
 
 /**
  * Spawn and return a new Player instance
- * 
+ *
  * @param   class'PlayerController' PC
  * @return  class'Player'
  */
@@ -548,7 +526,7 @@ protected function Player AddPlayer(PlayerController PC)
 
 /**
  * Return a Player instance corresponding to given PlayerController
- * 
+ *
  * @param   class'PlayerController' PC
  * @return  class'Player'
  */
@@ -571,7 +549,7 @@ public function Player GetPlayerByPC(PlayerController PC)
 
 /**
  * Return a Player instance corresponding to given Pawn
- * 
+ *
  * @param   class'Pawn' Pawn
  * @return  class'Player'
  */
@@ -595,7 +573,7 @@ public function Player GetPlayerByPawn(Pawn Pawn)
 /**
  * Return a Player instance corresponding to given Pawn
  * Lookup is performed against both the current player pawn and the last non-None saved instance
- * 
+ *
  * @param   class'Pawn' Pawn
  * @return  class'Player'
  */
@@ -619,7 +597,7 @@ public function Player GetPlayerByAnyPawn(Pawn Pawn)
 
 /**
  * Return a Player instance corresponding to given array index
- * 
+ *
  * @param   int i
  * @return  class'Player'
  */
@@ -634,7 +612,7 @@ public function Player GetPlayerByID(int i)
 
 /**
  * Return the first Player instance matching given name
- * 
+ *
  * @param   string Name
  *          Player name (case insensitive)
  * @return  class'Player'
@@ -659,7 +637,7 @@ public function Player GetPlayerByName(string Name)
 
 /**
  * Return an array of Player instances whose names match Criteria wildcard pattern
- * 
+ *
  * @param   string Criteria
  * @return  array<class'Player'>
  */
@@ -684,7 +662,7 @@ public function array<Player> GetPlayersByWildName(string Criteria)
 
 /**
  * Attempt to return the only player instance with the name matching Criteria pattern
- * 
+ *
  * @param   string Criteria
  *          Wildcard pattern
  * @return  class'Player'
@@ -710,7 +688,7 @@ public function Player GetPlayerByWildName(string Criteria)
 
 /**
  * Return array index of given Player instance
- * 
+ *
  * @param   class'Player' Player
  * @return  int
  */
@@ -730,7 +708,7 @@ public function int GetPlayerID(Player Player)
 
 /**
  * Return a Player instance of the player who fired with an item from given Weapons array at the given Time
- * 
+ *
  * @param   array<string> Weapons
  *          List of weapons
  * @param   float Time
@@ -764,7 +742,7 @@ public function Player GetPlayerByLastFiredWeapon(array<string> Weapons, float T
             continue;
         }
         // Check the item last firing time
-        if (Time-LastFiredWeapon.GetLastFiredTime() >= Precision[0] && 
+        if (Time-LastFiredWeapon.GetLastFiredTime() >= Precision[0] &&
             Time-LastFiredWeapon.GetLastFiredTime() <= Precision[1])
         {
             return self.Players[i];
@@ -775,7 +753,7 @@ public function Player GetPlayerByLastFiredWeapon(array<string> Weapons, float T
 
 /**
  * Tell whether a player name is unique to specific PlayerController's owner
- * 
+ *
  * @param   string Name
  * @param   class'PlayerController' PC
  * @return  bool
@@ -801,7 +779,7 @@ public function bool IsNameUniqueTo(string Name, PlayerController PC)
 
 /**
  * Return the list of player controllers
- * 
+ *
  * @return  array<class'Player'>
  */
 public function array<Player> GetPlayers()
@@ -811,7 +789,7 @@ public function array<Player> GetPlayers()
 
 /**
  * Return round outcome
- * 
+ *
  * @return  enum'eSwatRoundOutcome'
  */
 public function eSwatRoundOutcome GetOutcome()
@@ -821,7 +799,7 @@ public function eSwatRoundOutcome GetOutcome()
 
 /**
  * Return time played (in seconds)
- * 
+ *
  * @return  float
  */
 public function float GetTimePlayed()
@@ -831,7 +809,7 @@ public function float GetTimePlayed()
 
 /**
  * Return time elapsed since the last state reset
- * 
+ *
  * @return  float
  */
 public function float GetTimeTotal()
@@ -841,7 +819,7 @@ public function float GetTimeTotal()
 
 /**
  * Return the current game state
- * 
+ *
  * @return  enum'eSwatGameState'
  */
 public function eSwatGameState GetGameState()
@@ -851,7 +829,7 @@ public function eSwatGameState GetGameState()
 
 /**
  * Return the server name
- * 
+ *
  * @return  string
  */
 public function string GetHostname()
@@ -861,7 +839,7 @@ public function string GetHostname()
 
 /**
  * Return the join port value
- * 
+ *
  * @return  int
  */
 public function int GetPort()
@@ -871,7 +849,7 @@ public function int GetPort()
 
 /**
  * Return whether the server is password protected
- * 
+ *
  * @return  bool
  */
 public function bool IsPassworded()
@@ -881,7 +859,7 @@ public function bool IsPassworded()
 
 /**
  * Return the game name (SWAT 4/SWAT 4X)
- * 
+ *
  * @return  string
  */
 public function string GetGame()
@@ -891,7 +869,7 @@ public function string GetGame()
 
 /**
  * Return the game version
- * 
+ *
  * @return  string
  */
 public function string GetGameVer()
@@ -901,7 +879,7 @@ public function string GetGameVer()
 
 /**
  * Return the server gamemode
- * 
+ *
  * @return  enum'EMPMode'
  */
 public function EMPMode GetGameType()
@@ -911,7 +889,7 @@ public function EMPMode GetGameType()
 
 /**
  * Tell whether the current gametype is COOP
- * 
+ *
  * @return  bool
  */
 public function bool IsCOOP()
@@ -921,7 +899,7 @@ public function bool IsCOOP()
 
 /**
  * Return the friendly map name
- * 
+ *
  * @return  string
  */
 public function string GetMap()
@@ -931,7 +909,7 @@ public function string GetMap()
 
 /**
  * Return current player count
- * 
+ *
  * @return  int
  */
 public function int GetPlayerCount()
@@ -941,7 +919,7 @@ public function int GetPlayerCount()
 
 /**
  * Return the player limit
- * 
+ *
  * @return  int
  */
 public function int GetPlayerLimit()
@@ -951,7 +929,7 @@ public function int GetPlayerLimit()
 
 /**
  * Return the SWAT score
- * 
+ *
  * @return  int
  */
 public function int GetSwatScore()
@@ -961,7 +939,7 @@ public function int GetSwatScore()
 
 /**
  * Return the Suspects score
- * 
+ *
  * @return  int
  */
 public function int GetSuspectsScore()
@@ -971,7 +949,7 @@ public function int GetSuspectsScore()
 
 /**
  * Return the number of rounds won by SWAT
- * 
+ *
  * @return  int
  */
 public function int GetSwatVictories()
@@ -981,7 +959,7 @@ public function int GetSwatVictories()
 
 /**
  * Return the number of rounds won by suspects
- * 
+ *
  * @return  int
  */
 public function int GetSuspectsVictories()
@@ -991,7 +969,7 @@ public function int GetSuspectsVictories()
 
 /**
  * Return the number of bombs defused
- * 
+ *
  * @return  int
  */
 public function int GetBombsDefused()
@@ -1001,7 +979,7 @@ public function int GetBombsDefused()
 
 /**
  * Return the total number of bombs
- * 
+ *
  */
 public function int GetBombsTotal()
 {
@@ -1010,7 +988,7 @@ public function int GetBombsTotal()
 
 /**
  * Return current player index (zero-based)
- * 
+ *
  * @return  int
  */
 public function int GetRoundIndex()
@@ -1020,7 +998,7 @@ public function int GetRoundIndex()
 
 /**
  * Return the round limit
- * 
+ *
  * @return  int
  */
 public function int GetRoundLimit()
@@ -1030,7 +1008,7 @@ public function int GetRoundLimit()
 
 /**
  * Return the round remaining time
- * 
+ *
  * @return  int
  */
 public function int GetRoundRemainingTime()
@@ -1040,7 +1018,7 @@ public function int GetRoundRemainingTime()
 
 /**
  * Return the round special time
- * 
+ *
  * @return  int
  */
 public function int GetRoundSpecialTime()
@@ -1050,7 +1028,7 @@ public function int GetRoundSpecialTime()
 
 /**
  * Return the round time limit
- * 
+ *
  * @return  int
  */
 public function int GetRoundTimeLimit()
@@ -1076,10 +1054,8 @@ event Destroyed()
         self.Players[0].Destroy();
         self.Players.Remove(0, 1);
     }
-    
+
     log(self $ " has been destroyed");
 
     Super.Destroyed();
 }
-
-/* vim: set ft=java: */
