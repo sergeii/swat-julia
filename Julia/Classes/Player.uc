@@ -908,13 +908,13 @@ protected function CheckHits()
 
     LastFiredTime = LastFiredWeapon.GetLastFiredTime();
 
+    // Check if last fired item actually hit one of the registered actors
     for (i = 0; i < self.Hits.Length; i++)
     {
         if (self.Hits[i].Pawn == None)
         {
             continue;
         }
-        // Check if last fired item actually hit one of the registered actors
         if (self.Hits[i].Time - LastFiredTime >= class'Utils'.static.GetHitPrecision('Lethal')[0] &&
             self.Hits[i].Time - LastFiredTime <= class'Utils'.static.GetHitPrecision('Lethal')[1])
         {

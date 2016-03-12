@@ -14,7 +14,7 @@ const VERSION = "2.3.1";
  * Fixed tick rate (seconds)
  * @type float
  */
-const DELTA = 0.1;
+const DELTA = 0.5;
 
 /**
  * Reference to the cache handler instance
