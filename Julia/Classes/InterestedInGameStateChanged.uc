@@ -9,6 +9,5 @@ import enum eSwatGameState from SwatGame.SwatGUIConfig;
  *          Previous game state
  * @param   enum'eSwatGameState' NewState
  *          Current game state
- * @return  void
  */
 public function OnGameStateChanged(eSwatGameState OldState, eSwatGameState NewState);

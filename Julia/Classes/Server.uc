@@ -29,59 +29,36 @@ enum eSwatRoundOutcome
     SRO_SuspectsVictoriousSmashAndGrab,
 };
 
-/**
- * Reference to the Core instance
- * @type class'Core'
- */
-var protected Core Core;
-
-/**
- * List of player controllers
- * @type array<class'Player'>
- */
-var protected array<Player> Players;
+var Core Core;
+var array<Player> Players;
 
 /**
  * Time in seconds since the state reset
- * @type int
  */
-var protected float TimeTotal;
+var float TimeTotal;
 
 /**
  * Time in seconds spent on playing in the current state
- * @type int
  */
-var protected float TimePlayed;
+var float TimePlayed;
 
 /**
  * Round outcome (should only be seen during a GAMESTATE_PostGame state)
- * @type enum'eSwatRoundOutcome'
  */
-var protected eSwatRoundOutcome Outcome;
+var eSwatRoundOutcome Outcome;
 
 /**
  * Last saved game state (e.g. GAMESTATE_MidGame)
- * @type enum'eSwatGameState'
  */
-var protected eSwatGameState LastGameState;
+var eSwatGameState LastGameState;
 
-/**
- * Disable the Tick event
- *
- * @return  void
- */
+
 public function PreBeginPlay()
 {
     Super.PreBeginPlay();
     self.Disable('Tick');
 }
 
-/**
- * Inialize the instance
- *
- * @param   class'Core' Core
- * @return  void
- */
 public function Init(Core Core)
 {
     self.Core = Core;
@@ -102,14 +79,6 @@ public function Init(Core Core)
 
 /**
  * Queue a hit whenever a pawn gets incapacitated
- *
- * @param   class'Pawn' Pawn
- *          Reference to the Pawn instance of the hit actor
- * @param   class'Actor' Incapacitator
- *          The incapacitator
- * @param   bool bThreat
- *          Whether the hit AI actor (if it's actually one) was a threat
- * @return  void
  */
 public function OnPawnIncapacitated(Pawn Pawn, Actor Incapacitator, bool bThreat)
 {
@@ -139,12 +108,6 @@ public function OnPawnIncapacitated(Pawn Pawn, Actor Incapacitator, bool bThreat
 
 /**
  * Register a hit whenever a pawn gets injured
- *
- * @param   class'Pawn' Pawn
- *          Pawn of the damaged actor
- * @param   class'Actor' Damager
- *          Refrence to the damager's actor
- * @return  void
  */
 public function OnPawnDamaged(Pawn Pawn, Actor Damager)
 {
@@ -194,14 +157,6 @@ public function OnPawnDamaged(Pawn Pawn, Actor Damager)
 
 /**
  * Register a hit whenether an actor gets killed
- *
- * @param   class'Pawn' Pawn
- *          Reference to the Pawn object of the killed actor
- * @param   class'Actor' Killer
- *          The killer
- * @param   bool bThreat
- *          Whether the killed AI actor was a threat (COOP only)
- * @return  void
  */
 public function OnPawnDied(Pawn Pawn, Actor Killer, bool bThreat)
 {
@@ -239,10 +194,6 @@ public function OnPawnDied(Pawn Pawn, Actor Killer, bool bThreat)
 
 /**
  * Register a TOC report
- *
- * @param   interface'IAmReportableCharacter' ReportedCharacter
- * @param   class'Pawn' Reporter
- * @return  void
  */
 public function OnReportableReportedToTOC(IAmReportableCharacter ReportedCharacter, Pawn Reporter)
 {
@@ -268,18 +219,12 @@ public function OnReportableReportedToTOC(IAmReportableCharacter ReportedCharact
     )
     {
         self.Core.TriggerOnInternalEventBroadcast('PlayerReport', Pawn(ReportedCharacter).GetHumanReadableName(), Player);
-        Player.IncrementCharacterReports();
+        Player.CharacterReports++;
     }
 }
 
 /**
  * Register an arrest performed by a player
- *
- * @param   class'Pawn' Pawn
- *          Reference to the Pawn object of the arrested actor
- * @param   class'Pawn' Arrester
- *          Reference to the Pawn object of the arrester
- * @return  void
  */
 public function OnPawnArrested(Pawn Pawn, Pawn Arrester)
 {
@@ -299,12 +244,12 @@ public function OnPawnArrested(Pawn Pawn, Pawn Arrester)
     // Increment COOP enemy arrests
     if (Pawn.IsA('SwatEnemy'))
     {
-        PlayerOne.IncrementEnemyArrests();
+        PlayerOne.EnemyArrests++;
     }
     // Increment COOP civilian arrests
     else if (Pawn.IsA('SwatHostage'))
     {
-        PlayerOne.IncrementCivilianArrests();
+        PlayerOne.CivilianArrests++;
     }
     else if (Pawn.IsA('SwatPlayer'))
     {
@@ -315,10 +260,6 @@ public function OnPawnArrested(Pawn Pawn, Pawn Arrester)
 
 /**
  * Register detonation of a grenade owned by a player
- *
- * @param   class'Pawn' GrenadeOwner
- * @param   class'SwatGrenadeProjectile' Grenade
- * @return  void
  */
 public function OnGrenadeDetonated(Pawn GrenadeOwner, SwatGrenadeProjectile Grenade)
 {
@@ -341,8 +282,6 @@ public function OnGrenadeDetonated(Pawn GrenadeOwner, SwatGrenadeProjectile Gren
 
 /**
  * Attempt to set the round outcome
- *
- * @see  InterestedInEventBroadacast.OnEventBroadcast
  */
 public function bool OnEventBroadcast(Player Player, Actor Sender, name Type, string Msg, optional PlayerController Receiver, optional bool bHidden)
 {
@@ -394,8 +333,6 @@ public function bool OnEventBroadcast(Player Player, Actor Sender, name Type, st
 /**
  * Enforce player score reset (along with kills, deaths, etc) upon a round start.
  * This is ought to fix a problem where scores are not properly reset on servers with 16+ players.
- *
- * @return  void
  */
 public function OnMissionStarted()
 {
@@ -403,15 +340,13 @@ public function OnMissionStarted()
 
     for (i = 0; i < self.Players.Length; i++)
     {
-        SwatPlayerReplicationInfo(self.Players[i].GetPC().PlayerReplicationInfo).netScoreInfo.ResetForMPQuickRestart();
+        SwatPlayerReplicationInfo(self.Players[i].PC.PlayerReplicationInfo).netScoreInfo.ResetForMPQuickRestart();
     }
 }
 
 event Timer()
 {
-    // Check if game state has changed
     self.CheckGameState();
-    // Check for new players _after_ the potential state reset
     self.CheckPlayers();
     // Only increment play time when there are at least one player on server
     if (SwatRepo(Level.GetRepo()).AnyPlayersOnServer())
@@ -423,8 +358,6 @@ event Timer()
 
 /**
  * Attempt to detect a game state change
- *
- * @return  void
  */
 protected function CheckGameState()
 {
@@ -435,7 +368,7 @@ protected function CheckGameState()
 
     if (CurrentGameState != OldGameState)
     {
-        // Change gamestate _before_ triggering a signal
+        // Change gamestate before triggering a signal
         self.LastGameState = CurrentGameState;
         // MidGame -> PostGame
         if (OldGameState == GAMESTATE_MidGame)
@@ -456,8 +389,6 @@ protected function CheckGameState()
 
 /**
  * Attempt to detect new players that havent been yet added to the internal player list
- *
- * @return  void
  */
 protected function CheckPlayers()
 {
@@ -477,8 +408,6 @@ protected function CheckPlayers()
 
 /**
  * Reset the instance gamestate-related properties
- *
- * @return  void
  */
 protected function ResetInstance()
 {
@@ -494,7 +423,7 @@ protected function ResetInstance()
     for (i = self.Players.Length-1; i >= 0; i--)
     {
         // Remove disconnected players
-        if (self.Players[i].WasDropped())
+        if (self.Players[i].bWasDropped)
         {
             self.Players[i].Destroy();
             self.Players.Remove(i, 1);
@@ -508,9 +437,6 @@ protected function ResetInstance()
 
 /**
  * Spawn and return a new Player instance
- *
- * @param   class'PlayerController' PC
- * @return  class'Player'
  */
 protected function Player AddPlayer(PlayerController PC)
 {
@@ -526,9 +452,6 @@ protected function Player AddPlayer(PlayerController PC)
 
 /**
  * Return a Player instance corresponding to given PlayerController
- *
- * @param   class'PlayerController' PC
- * @return  class'Player'
  */
 public function Player GetPlayerByPC(PlayerController PC)
 {
@@ -538,7 +461,7 @@ public function Player GetPlayerByPC(PlayerController PC)
     {
         for (i = 0; i < Players.Length; i++)
         {
-            if (Players[i].GetPC() == PC)
+            if (Players[i].PC == PC)
             {
                 return Players[i];
             }
@@ -549,9 +472,6 @@ public function Player GetPlayerByPC(PlayerController PC)
 
 /**
  * Return a Player instance corresponding to given Pawn
- *
- * @param   class'Pawn' Pawn
- * @return  class'Player'
  */
 public function Player GetPlayerByPawn(Pawn Pawn)
 {
@@ -561,7 +481,7 @@ public function Player GetPlayerByPawn(Pawn Pawn)
     {
         for (i = 0; i < self.Players.Length; i++)
         {
-            if (self.Players[i].GetPC() != None && self.Players[i].GetPawn() == Pawn)
+            if (self.Players[i].PC != None && self.Players[i].PC.Pawn == Pawn)
             {
                 return Players[i];
             }
@@ -573,9 +493,6 @@ public function Player GetPlayerByPawn(Pawn Pawn)
 /**
  * Return a Player instance corresponding to given Pawn
  * Lookup is performed against both the current player pawn and the last non-None saved instance
- *
- * @param   class'Pawn' Pawn
- * @return  class'Player'
  */
 public function Player GetPlayerByAnyPawn(Pawn Pawn)
 {
@@ -585,7 +502,7 @@ public function Player GetPlayerByAnyPawn(Pawn Pawn)
     {
         for (i = 0; i < Players.Length; i++)
         {
-            if (Players[i].GetPC() != None && Players[i].GetPawn() == Pawn || Players[i].GetLastValidPawn() == Pawn)
+            if ((Players[i].PC != None && Players[i].PC.Pawn == Pawn) || Players[i].LastValidPawn == Pawn)
             {
                 return Players[i];
             }
@@ -597,9 +514,6 @@ public function Player GetPlayerByAnyPawn(Pawn Pawn)
 
 /**
  * Return a Player instance corresponding to given array index
- *
- * @param   int i
- * @return  class'Player'
  */
 public function Player GetPlayerByID(int i)
 {
@@ -612,10 +526,6 @@ public function Player GetPlayerByID(int i)
 
 /**
  * Return the first Player instance matching given name
- *
- * @param   string Name
- *          Player name (case insensitive)
- * @return  class'Player'
  */
 public function Player GetPlayerByName(string Name)
 {
@@ -623,7 +533,7 @@ public function Player GetPlayerByName(string Name)
 
     for (i = 0; i < Players.Length; i++)
     {
-        if (Players[i].GetPC() == None)
+        if (Players[i].PC == None)
         {
             continue;
         }
@@ -636,10 +546,7 @@ public function Player GetPlayerByName(string Name)
 }
 
 /**
- * Return an array of Player instances whose names match Criteria wildcard pattern
- *
- * @param   string Criteria
- * @return  array<class'Player'>
+ * Return an array of Player instances whose names match wildcard pattern
  */
 public function array<Player> GetPlayersByWildName(string Criteria)
 {
@@ -648,7 +555,7 @@ public function array<Player> GetPlayersByWildName(string Criteria)
 
     for (i = 0; i < self.Players.Length; i++)
     {
-        if (self.Players[i].GetPC() == None)
+        if (self.Players[i].PC == None)
         {
             continue;
         }
@@ -662,10 +569,6 @@ public function array<Player> GetPlayersByWildName(string Criteria)
 
 /**
  * Attempt to return the only player instance with the name matching Criteria pattern
- *
- * @param   string Criteria
- *          Wildcard pattern
- * @return  class'Player'
  */
 public function Player GetPlayerByWildName(string Criteria)
 {
@@ -688,9 +591,6 @@ public function Player GetPlayerByWildName(string Criteria)
 
 /**
  * Return array index of given Player instance
- *
- * @param   class'Player' Player
- * @return  int
  */
 public function int GetPlayerID(Player Player)
 {
@@ -709,13 +609,12 @@ public function int GetPlayerID(Player Player)
 /**
  * Return a Player instance of the player who fired with an item from given Weapons array at the given Time
  *
- * @param   array<string> Weapons
+ * @param   Weapons
  *          List of weapons
- * @param   float Time
+ * @param   Time
  *          Fire time (Level.TimeSeconds)
- * @param   array<float[2]> Precision
+ * @param   Precision
  *          Precision error
- * @return  class'Player'
  */
 public function Player GetPlayerByLastFiredWeapon(array<string> Weapons, float Time, optional array<float> Precision)
 {
@@ -725,25 +624,25 @@ public function Player GetPlayerByLastFiredWeapon(array<string> Weapons, float T
     for (i = 0; i < self.Players.Length; i++)
     {
         // We're not interrested in disconnected players
-        if (self.Players[i].GetPC() == None)
+        if (self.Players[i].PC == None)
         {
             continue;
         }
 
-        LastFiredWeapon = self.Players[i].GetLastFiredWeapon();
+        LastFiredWeapon = self.Players[i].LastFiredWeapon;
         // If this player hasn't fired yet, ignore them
-        if (LastFiredWeapon == None)
+        if (self.Players[i].LastFiredWeapon == None)
         {
             continue;
         }
         // The player has fired, but not with an item of the interest
-        if (class'Utils.ArrayUtils'.static.Search(Weapons, LastFiredWeapon.GetClassName()) == -1)
+        if (class'Utils.ArrayUtils'.static.Search(Weapons, LastFiredWeapon.ClassName) == -1)
         {
             continue;
         }
         // Check the item last firing time
-        if (Time-LastFiredWeapon.GetLastFiredTime() >= Precision[0] &&
-            Time-LastFiredWeapon.GetLastFiredTime() <= Precision[1])
+        if (Time-LastFiredWeapon.LastFiredTime >= Precision[0] &&
+            Time-LastFiredWeapon.LastFiredTime <= Precision[1])
         {
             return self.Players[i];
         }
@@ -753,10 +652,6 @@ public function Player GetPlayerByLastFiredWeapon(array<string> Weapons, float T
 
 /**
  * Tell whether a player name is unique to specific PlayerController's owner
- *
- * @param   string Name
- * @param   class'PlayerController' PC
- * @return  bool
  */
 public function bool IsNameUniqueTo(string Name, PlayerController PC)
 {
@@ -764,7 +659,7 @@ public function bool IsNameUniqueTo(string Name, PlayerController PC)
 
     for (i = 0; i < self.Players.Length; i++)
     {
-        if (self.Players[i].GetPC() == None || self.Players[i].GetPC() == PC)
+        if (self.Players[i].PC == None || self.Players[i].PC == PC)
         {
             continue;
         }
@@ -777,120 +672,43 @@ public function bool IsNameUniqueTo(string Name, PlayerController PC)
     return true;
 }
 
-/**
- * Return the list of player controllers
- *
- * @return  array<class'Player'>
- */
-public function array<Player> GetPlayers()
-{
-    return self.Players;
-}
-
-/**
- * Return round outcome
- *
- * @return  enum'eSwatRoundOutcome'
- */
-public function eSwatRoundOutcome GetOutcome()
-{
-    return self.Outcome;
-}
-
-/**
- * Return time played (in seconds)
- *
- * @return  float
- */
-public function float GetTimePlayed()
-{
-    return self.TimePlayed;
-}
-
-/**
- * Return time elapsed since the last state reset
- *
- * @return  float
- */
-public function float GetTimeTotal()
-{
-    return self.TimeTotal;
-}
-
-/**
- * Return the current game state
- *
- * @return  enum'eSwatGameState'
- */
 public function eSwatGameState GetGameState()
 {
     return SwatRepo(Level.GetRepo()).GuiConfig.SwatGameState;
 }
 
-/**
- * Return the server name
- *
- * @return  string
- */
 public function string GetHostname()
 {
     return ServerSettings(Level.CurrentServerSettings).ServerName;
 }
 
-/**
- * Return the join port value
- *
- * @return  int
- */
 public function int GetPort()
 {
     return SwatGameInfo(Level.Game).GetServerPort();
 }
 
-/**
- * Return whether the server is password protected
- *
- * @return  bool
- */
 public function bool IsPassworded()
 {
     return ServerSettings(Level.CurrentServerSettings).bPassworded;
 }
 
-/**
- * Return the game name (SWAT 4/SWAT 4X)
- *
- * @return  string
- */
 public function string GetGame()
 {
     return Level.ModName;
 }
 
-/**
- * Return the game version
- *
- * @return  string
- */
 public function string GetGameVer()
 {
     return Level.BuildVersion;
 }
 
-/**
- * Return the server gamemode
- *
- * @return  enum'EMPMode'
- */
 public function EMPMode GetGameType()
 {
     return ServerSettings(Level.CurrentServerSettings).GameType;
 }
 
 /**
- * Tell whether the current gametype is COOP
- *
- * @return  bool
+ * Check whether the current gametype is COOP
  */
 public function bool IsCOOP()
 {
@@ -899,8 +717,6 @@ public function bool IsCOOP()
 
 /**
  * Return the friendly map name
- *
- * @return  string
  */
 public function string GetMap()
 {
@@ -908,9 +724,7 @@ public function string GetMap()
 }
 
 /**
- * Return current player count
- *
- * @return  int
+ * Return the current player count
  */
 public function int GetPlayerCount()
 {
@@ -919,88 +733,50 @@ public function int GetPlayerCount()
 
 /**
  * Return the player limit
- *
- * @return  int
  */
 public function int GetPlayerLimit()
 {
     return ServerSettings(Level.CurrentServerSettings).MaxPlayers;
 }
 
-/**
- * Return the SWAT score
- *
- * @return  int
- */
 public function int GetSwatScore()
 {
     return SwatGameInfo(Level.Game).GetTeamFromID(0).NetScoreInfo.GetScore();
 }
 
-/**
- * Return the Suspects score
- *
- * @return  int
- */
 public function int GetSuspectsScore()
 {
     return SwatGameInfo(Level.Game).GetTeamFromID(1).NetScoreInfo.GetScore();
 }
 
-/**
- * Return the number of rounds won by SWAT
- *
- * @return  int
- */
 public function int GetSwatVictories()
 {
     return SwatGameInfo(Level.Game).GetTeamFromID(0).NetScoreInfo.GetRoundsWon();
 }
 
-/**
- * Return the number of rounds won by suspects
- *
- * @return  int
- */
 public function int GetSuspectsVictories()
 {
     return SwatGameInfo(Level.Game).GetTeamFromID(1).NetScoreInfo.GetRoundsWon();
 }
 
-/**
- * Return the number of bombs defused
- *
- * @return  int
- */
 public function int GetBombsDefused()
 {
     return SwatGameReplicationInfo(Level.Game.GameReplicationInfo).DiffusedBombs;
 }
 
-/**
- * Return the total number of bombs
- *
- */
 public function int GetBombsTotal()
 {
     return SwatGameReplicationInfo(Level.Game.GameReplicationInfo).TotalNumberOfBombs;
 }
 
 /**
- * Return current player index (zero-based)
- *
- * @return  int
+ * Return current zero based round index
  */
 public function int GetRoundIndex()
 {
     return ServerSettings(Level.CurrentServerSettings).RoundNumber;
 }
 
-/**
- * Return the round limit
- *
- * @return  int
- */
 public function int GetRoundLimit()
 {
     return ServerSettings(Level.CurrentServerSettings).NumRounds;
@@ -1008,8 +784,6 @@ public function int GetRoundLimit()
 
 /**
  * Return the round remaining time
- *
- * @return  int
  */
 public function int GetRoundRemainingTime()
 {
@@ -1018,23 +792,37 @@ public function int GetRoundRemainingTime()
 
 /**
  * Return the round special time
- *
- * @return  int
  */
 public function int GetRoundSpecialTime()
 {
     return SwatGameReplicationInfo(Level.Game.GameReplicationInfo).SpecialTime;
 }
 
-/**
- * Return the round time limit
- *
- * @return  int
- */
 public function int GetRoundTimeLimit()
 {
     return ServerSettings(Level.CurrentServerSettings).RoundTimeLimit;
 }
+
+
+/** Deprecated methods **/
+
+public function array<Player> GetPlayers()
+{
+    return self.Players;
+}
+public function eSwatRoundOutcome GetOutcome()
+{
+    return self.Outcome;
+}
+public function float GetTimePlayed()
+{
+    return self.TimePlayed;
+}
+public function float GetTimeTotal()
+{
+    return self.TimeTotal;
+}
+
 
 event Destroyed()
 {

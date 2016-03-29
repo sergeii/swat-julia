@@ -1,10 +1,9 @@
 interface InterestedInPlayerPawnChanged;
 
 /**
- * Implement this method in order to receieve OnPlayerPawnChanged signals
+ * Implement this method in order to receive OnPlayerPawnChanged signals
  *
- * @param   class'Player' Player
- *          The player with a new Pawn [Player.GetPawn() or Player.GetPC().Pawm]
- * @return  void
+ * @param   Player
+ *          The player with a new Pawn
  */
 public function OnPlayerPawnChanged(Player Player);

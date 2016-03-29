@@ -14,25 +14,21 @@ struct sHit
 {
     /**
      * Reference to the Pawn object of the hit actor
-     * @type class'Pawn'
      */
     var Pawn Pawn;
 
     /**
      * Time the actor was hit at (Level.TimeSeconds)
-     * @type float
      */
     var float Time;
 
     /**
      * Hit type
-     * @type enum'eHitType'
      */
     var eHitType Type;
 
     /**
      * Indicate whether the hit pawn was a threat to the player
-     * @type bool
      */
     var bool bThreat;
 };
@@ -41,395 +37,93 @@ struct sStun
 {
     /**
      * Stun type
-     * @type name
      */
     var name Type;
 
     /**
      * Time player was stunned at (Level.TimeSeconds)
-     * @type float
      */
     var float TimeStun;
 
     /**
      * Reference to the damager
-     * @type class'Player'
      */
     var Player Damager;
 
     /**
      * Time the damager fired their weapon (Level.TimeSeconds)
-     * @type float
      */
     var float TimeFired;
 
     /**
      * Indicate whether a stun entry is no longer relevant
-     * @type bool
      */
     var bool bIrrelevant;
 };
 
-/**
- * List of pawns the player has recently shot at
- * @type array<struct'sHit'>
- */
-var protected array<sHit> Hits;
+var Core Core;
+var Server Server;
 
-/**
- * List of registered stuns that the player has experienced recently
- * @type array<struct'sStun'>
- */
-var protected array<sStun> Stuns;
+var array<Weapon> Weapons;  // Weapons used in this round
+var array<sStun> Stuns;  // Recent stuns (by other actors)
+var array<sHit> Hits;  // Recent hits (to other actors)
 
-/**
- * List of Weapon instances corresponding
- * to equipment items the player has used since the level start
- * @type array<class'Weapon'>
- */
-var protected array<Weapon> Weapons;
+var PlayerController PC;
+var Pawn LastPawn;
+var Pawn LastValidPawn;  // Last non None Pawn instance
+var Weapon LastFiredWeapon;
+var eVoiceType LastVoiceType;
+var string LastName;
+var string IpAddr;  // IP address string (without the port part)
+var bool bWasLoaded;
+var bool bWasAdmin;
+var bool bWasDropped;
+var bool bWasVIP;
+var bool bWasDead;
+var float TimePlayed;
+var float TimeTotal;
+var int Suicides;
+var int LastTeam;
+var int LastScore;
+var int LastKills;
+var int LastTeamKills;
+var int LastDeaths;
+var int LastArrests;
+var int LastArrested;
+var int LastVIPCaptures;
+var int LastVIPRescues;
+var int LastVIPEscapes;
+var int LastVIPKillsValid;
+var int LastVIPKillsInvalid;
+var int LastBombsDefused;
+var int LastRDCryBaby;
+var int LastSGCryBaby;
+var int LastSGEscapes;
+var int LastSGKills;
+var COOPStatus LastCOOPStatus;
+var int CharacterReports;
+var int CivilianArrests;
+var int CivilianHits;
+var int CivilianIncaps;
+var int CivilianKills;
+var int EnemyArrests;
+var int EnemyIncaps;
+var int EnemyIncapsInvalid;
+var int EnemyKills;
+var int EnemyKillsInvalid;
+var int CurrentKillStreak;
+var int BestKillStreak;
+var int CurrentArrestStreak;
+var int BestArrestStreak;
+var int CurrentDeathStreak;
+var int BestDeathStreak;
+var float LastFlashbangedTime;
+var float LastGassedTime;
+var float LastPepperedTime;
+var float LastTasedTime;
+var float LastStungTime;
 
-/**
- * Referenc to the Core instance
- * @type class'Core'
- */
-var protected Core Core;
 
-/**
- * Reference to the Core's Server instance
- * @type class'Server'
- */
-var protected Server Server;
-
-/**
- * Reference to the tied PlayerController instance
- * @type class'PlayerController'
- */
-var protected PlayerController PC;
-
-/**
- * Reference to the Pawn instance
- * @type class'Pawn'
- */
-var protected Pawn LastPawn;
-
-/**
- * Reference to the last non-None Pawn instance
- * @type class'Pawn'
- */
-var protected Pawn LastValidPawn;
-
-/**
- * Reference to the last fired weapon
- * @type class'Weapon'
- */
-var protected Weapon LastFiredWeapon;
-
-/**
- * Last saved player voice type
- * @type enum'eVoiceType'
- */
-var protected eVoiceType LastVoiceType;
-
-/**
- * Last saved player name
- * @type string
- */
-var protected string LastName;
-
-/**
- * Player IP address
- * @type string
- */
-var protected string IpAddr;
-
-/**
- * Indicate whether this player has joined game
- * @type bool
- */
-var protected bool bWasLoaded;
-
-/**
- * Indicate whether the player is an admin
- * @type bool
- */
-var protected bool bWasAdmin;
-
-/**
- * Indicate whether the player has disconnected
- * @type bool
- */
-var protected bool bWasDropped;
-
-/**
- * Whether this player was the VIP at the latest tick
- * @type bool
- */
-var protected bool bWasVIP;
-
-/**
- * Indicate whether the player was dead at the previous tick
- * @type bool
- */
-var protected bool bWasDead;
-
-/**
- * Time in seconds this player has spent playing
- * @type float
- */
-var protected float TimePlayed;
-
-/**
- * Time in seconds this player has spent on the server
- * @type float
- */
-var protected float TimeTotal;
-
-/**
- * Current number of suicides (0)
- * @type int
- */
-var protected int Suicides;
-
-/**
- * Last saved player team
- * @type int
- */
-var protected int LastTeam;
-
-/**
- * Last saved score
- * @type int
- */
-var protected int LastScore;
-
-/**
- * Last saved number of kills (1)
- * @type int
- */
-var protected int LastKills;
-
-/**
- * Last saved number of teamkills (-3)
- * @type int
- */
-var protected int LastTeamKills;
-
-/**
- * Last saved number of deaths (0)
- * @type int
- */
-var protected int LastDeaths;
-
-/**
- * Last saved number of arrests (5)
- * @type int
- */
-var protected int LastArrests;
-
-/**
- * Last saved number of times arrested (0)
- * @type int
- */
-var protected int LastArrested;
-
-/**
- * Last saved number of VIP arrests (10)
- * @type int
- */
-var protected int LastVIPCaptures;
-
-/**
- * Last saved number of VIP rescues (10)
- * @type int
- */
-var protected int LastVIPRescues;
-
-/**
- * Last saved number of VIP escapes (10)
- * @type int
- */
-var protected int LastVIPEscapes;
-
-/**
- * Last saved number of valid VIP kills (10)
- * @type int
- */
-var protected int LastVIPKillsValid;
-
-/**
- * Last saved number of invalid VIP kills (-51)
- * @type int
- */
-var protected int LastVIPKillsInvalid;
-
-/**
- * Last saved number of bombs defused (10)
- * @type int
- */
-var protected int LastBombsDefused;
-
-/**
- * Last saved number of rapid Deployment suspect wins (10)
- * @type int
- */
-var protected int LastRDCryBaby;
-
-/**
- * Last saved number of smash and Grab swat wins (10)
- * @type int
- */
-var protected int LastSGCryBaby;
-
-/**
- * Last saved number of Smash and Grab case escapes (10)
- * @type int
- */
-var protected int LastSGEscapes;
-
-/**
- * Last saved number of Smash and Grab case kills (2)
- * @type int
- */
-var protected int LastSGKills;
-
-/**
- * Last saved COOP player status
- * @type enum'COOPStatus'
- */
-var protected COOPStatus LastCOOPStatus;
-
-/**
- * Last saved number of reported characters
- * @type int
- */
-var protected int CharacterReports;
-
-/**
- * Last saved number of civilian arrests
- * @type int
- */
-var protected int CivilianArrests;
-
-/**
- * Last saved number of civilian hits
- * @type int
- */
-var protected int CivilianHits;
-
-/**
- * Last saved number of civilian incaps
- * @type int
- */
-var protected int CivilianIncaps;
-
-/**
- * Last saved number of civlian kills
- * @type int
- */
-var protected int CivilianKills;
-
-/**
- * Last saved number of civilian arrests
- * @type int
- */
-var protected int EnemyArrests;
-
-/**
- * Last saved number of enemy incaps
- * @type int
- */
-var protected int EnemyIncaps;
-
-/**
- * Last saved number of invalid enemy incaps
- * @type int
- */
-var protected int EnemyIncapsInvalid;
-
-/**
- * Last saved umber of enemy kills
- * @type int
- */
-var protected int EnemyKills;
-
-/**
- * Last saved number of invalid enemy kills
- * @type int
- */
-var protected int EnemyKillsInvalid;
-
-/**
- * Current kill streak
- * @type int
- */
-var protected int CurrentKillStreak;
-
-/**
- * Last best kill streak
- * @type int
- */
-var protected int BestKillStreak;
-
-/**
- * Current arrest streak
- * @type int
- */
-var protected int CurrentArrestStreak;
-
-/**
- * Last best arrest streak
- * @type int
- */
-var protected int BestArrestStreak;
-
-/**
- * Current death streak
- * @type int
- */
-var protected int CurrentDeathStreak;
-
-/**
- * Last best death streak
- * @type int
- */
-var protected int BestDeathStreak;
-
-/**
- * Time the player was last flashed at (Level.TimeSeconds)
- * @type float
- */
-var protected float LastFlashbangedTime;
-
-/**
- * Time the player was last gassed at (Level.TimeSeconds)
- * @type float
- */
-var protected float LastGassedTime;
-
-/**
- * Time the player was last tased at (Level.TimeSeconds)
- * @type float
- */
-var protected float LastPepperedTime;
-
-/**
- * Time the player was last tased at (Level.TimeSeconds)
- * @type float
- */
-var protected float LastTasedTime;
-
-/**
- * Time the player was last stung at (Level.TimeSeconds)
- * @type float
- */
-var protected float LastStungTime;
-
-/**
- * Set properties to their default values
- *
- * @return  void
- */
 public function PreBeginPlay()
 {
     Super.PreBeginPlay();
@@ -438,15 +132,6 @@ public function PreBeginPlay()
     self.LastTeam = -1;
 }
 
-/**
- * Initialize the instance
- *
- * @param   class'Server' Server
- *          Reference to the server instance
- * @param   class'PlayerController' PC
- *          Reference to a PlayerController instance that should be tied with the instance
- * @return  void
- */
 public function Init(PlayerController PC, Server Server, Core Core)
 {
     self.IpAddr = class'Utils.StringUtils'.static.ParseIP(PC.GetPlayerNetworkAddress());
@@ -460,10 +145,6 @@ public function Init(PlayerController PC, Server Server, Core Core)
     self.SetTimer(class'Core'.const.DELTA, false);
 }
 
-/**
- * Check whether player is still online.
- * If he/she is, then update their stats. Otherwise trigger the Core.OnPlayerDisconnected signal
- */
 event Timer()
 {
     // The player has already been processed as disconnected
@@ -512,8 +193,6 @@ event Timer()
 
 /**
  * Update usage details of the currently used weapon/equipment item
- *
- * @return  void
  */
 protected function CheckWeapon()
 {
@@ -557,8 +236,6 @@ protected function CheckWeapon()
 
 /**
  * Attempt to detect a change of the player's pawn
- *
- * @return  void
  */
 protected function CheckPawn()
 {
@@ -575,8 +252,6 @@ protected function CheckPawn()
 
 /**
  * Attempt to detect a change of the player's voice type
- *
- * @return  void
  */
 protected function CheckVoiceType()
 {
@@ -588,42 +263,40 @@ protected function CheckVoiceType()
 }
 
 /**
- * Attempt to detect a change of team
- *
- * @return  void
+ * Attempt to detect a team change
  */
 protected function CheckTeam()
 {
-    if (self.LastTeam != self.GetTeam())
+    local int CurrentTeam;
+
+    CurrentTeam = self.GetTeam();
+
+    if (self.LastTeam != CurrentTeam)
     {
-        self.LastTeam = self.GetTeam();
+        self.LastTeam = CurrentTeam;
         self.Core.TriggerOnPlayerTeamSwitched(self);
     }
 }
 
 /**
  * Attempt to detect a name change
- *
- * @return  void
  */
 protected function CheckName()
 {
-    local string OldName, NewName;
+    local string OldName, CurrentName;
 
-    NewName = self.GetName();
+    CurrentName = self.GetName();
 
-    if (NewName != self.LastName)
+    if (CurrentName != self.LastName)
     {
         OldName = self.LastName;
-        self.LastName = NewName;
+        self.LastName = CurrentName;
         self.Core.TriggerOnPlayerNameChanged(self, OldName);
     }
 }
 
 /**
  * Check whether player has just joined game
- *
- * @return  void
  */
 protected function CheckLoaded()
 {
@@ -636,8 +309,6 @@ protected function CheckLoaded()
 
 /**
  * Check whether the player has just logged into admin
- *
- * @return  void
  */
 protected function CheckAdmin()
 {
@@ -650,29 +321,29 @@ protected function CheckAdmin()
 
 /**
  * Check whether the player has gained or lost VIP status since the last tick
- *
- * @return  void
  */
 protected function CheckVIP()
 {
+    local bool IsCurrentlyVIP;
+
+    IsCurrentlyVIP = self.IsVIP();
+
     if (self.Server.GetGameState() != GAMESTATE_MidGame)
     {
         return;
     }
-    if (self.IsVIP())
+    if (IsCurrentlyVIP)
     {
         if (!self.bWasVIP)
         {
             self.Core.TriggerOnPlayerVIPSet(self);
         }
     }
-    self.bWasVIP = self.IsVIP();
+    self.bWasVIP = IsCurrentlyVIP;
 }
 
 /**
  * Save intermediate player stats
- *
- * @return  void
  */
 protected function UpdateStats()
 {
@@ -744,8 +415,6 @@ protected function UpdateStats()
 
 /**
  * Attempt to detect whether the player has recently been stunned
- *
- * @return  void
  */
 protected function DetectStuns()
 {
@@ -803,8 +472,6 @@ protected function DetectStuns()
 
 /**
  * Attempt to find players and their weapons that were the cause of every queued stun in the list
- *
- * @return  void
  */
 protected function CheckStuns()
 {
@@ -839,15 +506,15 @@ protected function CheckStuns()
         );
         if (Damager != None)
         {
-            DamagerWeapon = Damager.GetLastFiredWeapon();
+            DamagerWeapon = Damager.LastFiredWeapon;
             // See if the player has already been stun with the same item
-            if (self.HasAlreadyBeenStun(self.Stuns[i].Type, Damager, DamagerWeapon.GetLastFiredTime()))
+            if (self.HasAlreadyBeenStun(self.Stuns[i].Type, Damager, DamagerWeapon.LastFiredTime))
             {
                 log(self $ ": " $ self.Stuns[i].Type $ " of " $ self.GetName() $ " has already been processed");
                 self.Stuns[i].bIrrelevant = true;
                 continue;
             }
-            log(self $ ": found damager for " $ self.Stuns[i].Type $ " stun of " $ self.GetName() $ " (" $ Damager.GetLastName() $ ", " $ DamagerWeapon.GetClassName() $ ")");
+            log(self $ ": found damager for " $ self.Stuns[i].Type $ " stun of " $ self.GetName() $ " (" $ Damager.LastName $ ", " $ DamagerWeapon.ClassName $ ")");
 
             // Dont handle stuns if the player is arrested
             if (!NetPlayer(self.PC.Pawn).IsBeingArrestedNow() && !NetPlayer(self.PC.Pawn).IsArrested())
@@ -856,12 +523,12 @@ protected function CheckStuns()
                 if (self.IsEnemyTo(Damager))
                 {
                     // Increment hit count of the enemy's weapon
-                    DamagerWeapon.IncrementHits();
+                    DamagerWeapon.Hits++;
                     self.Core.TriggerOnInternalEventBroadcast('PlayerHit', DamagerWeapon.GetFriendlyName(), Damager, self);
                 }
                 else if (Damager != self)
                 {
-                    DamagerWeapon.IncrementTeamHits();
+                    DamagerWeapon.TeamHits++;
                     self.Core.TriggerOnInternalEventBroadcast('PlayerTeamHit', DamagerWeapon.GetFriendlyName(), Damager, self);
                 }
                 else
@@ -873,7 +540,7 @@ protected function CheckStuns()
             // Remember the damager
             self.Stuns[i].Damager = Damager;
             // Also store the firing time
-            self.Stuns[i].TimeFired = DamagerWeapon.GetLastFiredTime();
+            self.Stuns[i].TimeFired = DamagerWeapon.LastFiredTime;
         }
     }
 
@@ -889,24 +556,19 @@ protected function CheckStuns()
 
 /**
  * Attempt to detect a fired weapon for every registered pawn hit
- *
- * @return  void
  */
 protected function CheckHits()
 {
     local int i;
     local float LastFiredTime;
-    local Weapon LastFiredWeapon;
-
-    LastFiredWeapon = self.GetLastFiredWeapon();
 
     // This player hasn't fired anything yet..
-    if (LastFiredWeapon == None)
+    if (self.LastFiredWeapon == None)
     {
         return;
     }
 
-    LastFiredTime = LastFiredWeapon.GetLastFiredTime();
+    LastFiredTime = self.LastFiredWeapon.LastFiredTime;
 
     // Check if last fired item actually hit one of the registered actors
     for (i = 0; i < self.Hits.Length; i++)
@@ -947,15 +609,14 @@ protected function CheckHits()
  * Handle a processed hit (i.e. a hit with a fired weapon assigned to)
  * Ignore hits made against arrested pawns
  *
- * @param   enum'eHitType' Type
+ * @param   Type
  *          Hit type
- * @param   class'Pawn' Pawn
- *          Hit pawn
- * @param   class'Weapon' Weapon (optional)
+ * @param   Pawn
+ *          The hit pawn
+ * @param   Weapon (optional)
  *          The weapon the player has hit with
- * @param   bool bThreat (optional)
+ * @param   bThreat (optional)
  *          Indicate whether the hit pawn was a threat
- * @return  void
  */
 protected function HandleHit(eHitType Type, Pawn Pawn, optional Weapon Weapon, optional bool bThreat)
 {
@@ -981,10 +642,6 @@ protected function HandleHit(eHitType Type, Pawn Pawn, optional Weapon Weapon, o
 
 /**
  * Handle an injury hit
- *
- * @param   class'Pawn' InjuredPawn
- * @param   class'Weapon' Weapon
- * @return  void
  */
 protected function HandleInjuryHit(Pawn InjuredPawn, Weapon Weapon)
 {
@@ -992,13 +649,13 @@ protected function HandleInjuryHit(Pawn InjuredPawn, Weapon Weapon)
 
     if (InjuredPawn.IsA('SwatHostage'))
     {
-        self.IncrementCivilianHits();
+        self.CivilianHits++;
         // Trigger an internal event whenever a player hits a hostage
         self.Core.TriggerOnInternalEventBroadcast('PlayerHostageHit', Weapon.GetFriendlyName(), self);
     }
     else if (InjuredPawn.IsA('SwatEnemy'))
     {
-        Weapon.IncrementHits();
+        Weapon.Hits++;
         // Trigger an internal event whenever a player hits a suspect
         self.Core.TriggerOnInternalEventBroadcast('PlayerEnemyHit', Weapon.GetFriendlyName(), self);
     }
@@ -1008,7 +665,7 @@ protected function HandleInjuryHit(Pawn InjuredPawn, Weapon Weapon)
         // Ignore grenade hits, because they are detected elsewhere in this class
         if (Weapon.IsGrenade())
         {
-            log(self $ ": ignoring a grenade hit for " $ self.GetLastName());
+            log(self $ ": ignoring a grenade hit for " $ self.LastName);
             return;
         }
 
@@ -1022,13 +679,13 @@ protected function HandleInjuryHit(Pawn InjuredPawn, Weapon Weapon)
 
         if (self.IsEnemyTo(Injured))
         {
-            Weapon.IncrementHits();
+            Weapon.Hits++;
             // Trigger an internal event whenever a player hits an enemy player
             self.Core.TriggerOnInternalEventBroadcast('PlayerHit', Weapon.GetFriendlyName(), self, Injured);
         }
         else if (Injured != self)
         {
-            Weapon.IncrementTeamHits();
+            Weapon.TeamHits++;
             // Trigger an internal event whenever a player hits an enemy
             self.Core.TriggerOnInternalEventBroadcast('PlayerTeamHit', Weapon.GetFriendlyName(), self, Injured);
         }
@@ -1042,17 +699,12 @@ protected function HandleInjuryHit(Pawn InjuredPawn, Weapon Weapon)
 
 /**
  * Handle a hit that has led to a serious injury
- *
- * @param   class'Pawn' InjuredPawn
- * @param   class'Weapon' Weapon
- * @param   bool bThreat
- * @return  void
  */
 protected function HandleIncapHit(Pawn InjuredPawn, Weapon Weapon, optional bool bThreat)
 {
     if (InjuredPawn.IsA('SwatHostage'))
     {
-        self.IncrementCivilianIncaps();
+        self.CivilianIncaps++;
         // Trigger an internal event whenever a player incapacitates a hostage
         self.Core.TriggerOnInternalEventBroadcast('PlayerHostageIncap', Weapon.GetFriendlyName(), self);
     }
@@ -1060,29 +712,24 @@ protected function HandleIncapHit(Pawn InjuredPawn, Weapon Weapon, optional bool
     {
         if (bThreat)
         {
-            self.IncrementEnemyIncaps();
+            self.EnemyIncaps++;
             // Trigger an internal event whenever a player incapacitates a suspect
             self.Core.TriggerOnInternalEventBroadcast('PlayerEnemyIncap', Weapon.GetFriendlyName(), self);
         }
         else
         {
-            self.IncrementEnemyIncapsInvalid();
+            self.EnemyIncapsInvalid++;
             // Trigger an internal event whenever the player
             // incapacitates a suspect without a reason
             self.Core.TriggerOnInternalEventBroadcast('PlayerEnemyIncapInvalid', Weapon.GetFriendlyName(), self);
         }
         // Since this is also a hit, update the item hits
-        Weapon.IncrementHits();
+        Weapon.Hits++;
     }
 }
 
 /**
  * Handle a killing blow
- *
- * @param   class'Pawn' VictimPawn
- * @param   class'Weapon' Weapon
- * @param   bool bThreat
- * @return  void
  */
 protected function HandleKillHit(Pawn VictimPawn, Weapon Weapon, optional bool bThreat)
 {
@@ -1090,25 +737,25 @@ protected function HandleKillHit(Pawn VictimPawn, Weapon Weapon, optional bool b
 
     if (VictimPawn.IsA('SwatHostage'))
     {
-        self.IncrementCivilianKills();
+        self.CivilianKills++;
         // Trigger an internal event whenever a player kills a hostage
         self.Core.TriggerOnInternalEventBroadcast('PlayerHostageKill', Weapon.GetFriendlyName(), self);
     }
     else if (VictimPawn.IsA('SwatEnemy'))
     {
-        Weapon.IncrementKills();
+        Weapon.Kills++;
         // Check if the kill distance beats the previous record
         Weapon.CheckKillDistance(VDist(self.LastValidPawn.Location, VictimPawn.Location));
 
         if (bThreat)
         {
-            self.IncrementEnemyKills();
+            self.EnemyKills++;
             // Trigger an event whenever a player kills a suspect
             self.Core.TriggerOnInternalEventBroadcast('PlayerEnemyKill', Weapon.GetFriendlyName(), self);
         }
         else
         {
-            self.IncrementEnemyKillsInvalid();
+            self.EnemyKillsInvalid++;
             // Trigger an internal event whenever a player kills a suspect without a reason
             self.Core.TriggerOnInternalEventBroadcast('PlayerEnemyKillInvalid', Weapon.GetFriendlyName(), self);
         }
@@ -1126,20 +773,20 @@ protected function HandleKillHit(Pawn VictimPawn, Weapon Weapon, optional bool b
 
         if (self.IsEnemyTo(Victim))
         {
-            Weapon.IncrementKills();
+            Weapon.Kills++;
             Weapon.CheckKillDistance(VDist(self.LastValidPawn.Location, VictimPawn.Location));
             // Trigger an internal event whenever a player hits another player
             self.Core.TriggerOnInternalEventBroadcast('PlayerKill', Weapon.GetFriendlyName(), self, Victim);
         }
         else if (Victim != self)
         {
-            Weapon.IncrementTeamKills();
+            Weapon.TeamKills++;
             // Trigger an internal event whenever a player hits a team mate
             self.Core.TriggerOnInternalEventBroadcast('PlayerTeamKill', Weapon.GetFriendlyName(), self, Victim);
         }
         else
         {
-            self.IncrementSuicides();
+            self.Suicides++;
             // Trigger an internal event whenever a player suicides
             self.Core.TriggerOnInternalEventBroadcast('PlayerSuicide', Weapon.GetFriendlyName(), self);
         }
@@ -1148,8 +795,6 @@ protected function HandleKillHit(Pawn VictimPawn, Weapon Weapon, optional bool b
 
 /**
  * Reset the instance properties
- *
- * @return  void
  */
 public function ResetInstance()
 {
@@ -1212,8 +857,6 @@ public function ResetInstance()
 
 /**
  * Keep the instance along with its game stats properties untill a proper destruction
- *
- * @return  void
  */
 protected function PreserveInstance()
 {
@@ -1232,80 +875,7 @@ protected function PreserveInstance()
 }
 
 /**
- * Return the PlayerController instance
- *
- * @return  class'PlayerController'
- */
-public function PlayerController GetPC()
-{
-    return self.PC;
-}
-
-/**
- * Return the current Pawn
- *
- * @return  class'Pawn'
- */
-public function Pawn GetPawn()
-{
-    return self.PC.Pawn;
-}
-
-/**
- * Return the last saved Pawn instance
- *
- * @return  class'Pawn'
- */
-public function Pawn GetLastPawn()
-{
-    return self.LastPawn;
-}
-
-/**
- * Return the last saved non-None Pawn instance
- *
- * @return  class'Pawn'
- */
-public function Pawn GetLastValidPawn()
-{
-    return self.LastValidPawn;
-}
-
-/**
- * Return the reference to the last fired weapon
- *
- * @return  class'Weapon'
- */
-public function Weapon GetLastFiredWeapon()
-{
-    return self.LastFiredWeapon;
-}
-
-/**
- * Store a reference to the given Weapon as the last fired weapon
- *
- * @param   class'Weapon' Weapon
- * @return  void
- */
-public function SetLastFiredWeapon(Weapon Weapon)
-{
-    self.LastFiredWeapon = Weapon;
-}
-
-/**
- * Return the list of used weapons
- *
- * @return  array<class'Weapon'>
- */
-public function array<Weapon> GetWeapons()
-{
-    return self.Weapons;
-}
-
-/**
  * Return the player's current voice type
- *
- * @return  enum'eVoiceType'
  */
 public function eVoiceType GetVoiceType()
 {
@@ -1317,11 +887,7 @@ public function eVoiceType GetVoiceType()
 }
 
 /**
- * Set the player's voicetype to VoiceType
- *
- * @param   enum'eVoiceType' VoiceType
- *          New voicetype
- * @return  void
+ * Set the player's voicetype to given VoiceType
  */
 public function SetVoiceType(eVoiceType VoiceType)
 {
@@ -1334,29 +900,7 @@ public function SetVoiceType(eVoiceType VoiceType)
 }
 
 /**
- * Return the last saved voice type value
- *
- * @return  enum'eVoiceType'
- */
-public function eVoiceType GetLastVoiceType()
-{
-    return self.LastVoiceType;
-}
-
-/**
- * Return ip address of the player
- *
- * @return  string
- */
-public function string GetIPAddr()
-{
-    return self.IpAddr;
-}
-
-/**
  * Return the player's team
- *
- * @return  int
  */
 public function int GetTeam()
 {
@@ -1364,19 +908,7 @@ public function int GetTeam()
 }
 
 /**
- * Return the player's last saved team
- *
- * @return int
- */
-public function int GetLastTeam()
-{
-    return self.LastTeam;
-}
-
-/**
  * Return the player's name
- *
- * @return  string
  */
 public function string GetName()
 {
@@ -1384,29 +916,7 @@ public function string GetName()
 }
 
 /**
- * Return the last saved name
- *
- * @return  string
- */
-public function string GetLastName()
-{
-    return self.LastName;
-}
-
-/**
- * Tell whether the player has dropped
- *
- * @return  bool
- */
-public function bool WasDropped()
-{
-    return self.bWasDropped;
-}
-
-/**
  * Tell whether the player is dead
- *
- * @return  bool
  */
 public function bool IsDead()
 {
@@ -1414,19 +924,7 @@ public function bool IsDead()
 }
 
 /**
- * Tell whether the player was dead at the previous tick
- *
- * @return  bool
- */
-public function bool WasDead()
-{
-    return self.bWasDead;
-}
-
-/**
  * Tell whether the player is the VIP
- *
- * @return  bool
  */
 public function bool IsVIP()
 {
@@ -1434,19 +932,7 @@ public function bool IsVIP()
 }
 
 /**
- * Tell whether the player wss the VIP the last time
- *
- * @return  bool
- */
-public function bool WasVIP()
-{
-    return self.bWasVIP;
-}
-
-/**
  * Tell whether the player has joined game
- *
- * @return  bool
  */
 public function bool HasLoaded()
 {
@@ -1454,19 +940,7 @@ public function bool HasLoaded()
 }
 
 /**
- * Tell whether the player had joined the game at the last tick
- *
- * @return  void
- */
-public function bool WasLoaded()
-{
-    return self.bWasLoaded;
-}
-
-/**
  * Tell whether the player is an admin
- *
- * @return  bool
  */
 public function bool IsAdmin()
 {
@@ -1474,19 +948,7 @@ public function bool IsAdmin()
 }
 
 /**
- * Tell whetther the player was an admin at the latest tick
- *
- * @return  bool
- */
-public function bool WasAdmin()
-{
-    return self.bWasAdmin;
-}
-
-/**
  * Tell whether the player is in spec/view mode
- *
- * @return  bool
  */
 public function bool IsSpectator()
 {
@@ -1498,8 +960,6 @@ public function bool IsSpectator()
 
 /**
  * Return the current number of teamkills
- *
- * @return  int
  */
 public function int GetTeamKills()
 {
@@ -1507,19 +967,7 @@ public function int GetTeamKills()
 }
 
 /**
- * Return the last saved number of teamkills
- *
- * @return  int
- */
-public function int GetLastTeamKills()
-{
-    return self.LastTeamKills;
-}
-
-/**
  * Return the number of times arrested
- *
- * @return  int
  */
 public function int GetArrested()
 {
@@ -1527,19 +975,7 @@ public function int GetArrested()
 }
 
 /**
- * Return the last saved number of times arrested
- *
- * @return  int
- */
-public function int GetLastArrested()
-{
-    return self.LastArrested;
-}
-
-/**
  * Return the number of VIP captures
- *
- * @return  int
  */
 public function int GetVIPCaptures()
 {
@@ -1547,19 +983,7 @@ public function int GetVIPCaptures()
 }
 
 /**
- * Return the last number of VIP captures
- *
- * @return  int
- */
-public function int GetLastVIPCaptures()
-{
-    return self.LastVIPCaptures;
-}
-
-/**
  * Return the last number of vip rescues
- *
- * @return  int
  */
 public function int GetVIPRescues()
 {
@@ -1567,19 +991,7 @@ public function int GetVIPRescues()
 }
 
 /**
- * Return the last saved number of vip rescues
- *
- * @return  int
- */
-public function int GetLastVIPRescues()
-{
-    return self.LastVIPRescues;
-}
-
-/**
  * Return the number of vip escapes
- *
- * @return  int
  */
 public function int GetVIPEscapes()
 {
@@ -1587,19 +999,7 @@ public function int GetVIPEscapes()
 }
 
 /**
- * Return the last saved number of vip escapes
- *
- * @return  int
- */
-public function int GetLastVIPEscapes()
-{
-    return self.LastVIPEscapes;
-}
-
-/**
  * Return the number of valid VIP kills
- *
- * @return  int
  */
 public function int GetVIPKillsValid()
 {
@@ -1607,19 +1007,7 @@ public function int GetVIPKillsValid()
 }
 
 /**
- * Return the last saved number of VIP kills
- *
- * @return  int
- */
-public function int GetLastVIPKillsValid()
-{
-    return self.LastVIPKillsValid;
-}
-
-/**
  * Return the number of invalid VIP kills
- *
- * @return  int
  */
 public function int GetVIPKillsInvalid()
 {
@@ -1627,19 +1015,7 @@ public function int GetVIPKillsInvalid()
 }
 
 /**
- * Return the last saved number of invalid VIP kills
- *
- * @return  int
- */
-public function int GetLastVIPKillsInvalid()
-{
-    return self.LastVIPKillsInvalid;
-}
-
-/**
  * Return the number of defused bombs
- *
- * @return  int
  */
 public function int GetBombsDefused()
 {
@@ -1647,19 +1023,7 @@ public function int GetBombsDefused()
 }
 
 /**
- * Return the last saved number of defused bombs
- *
- * @return  int
- */
-public function int GetLastBombsDefused()
-{
-    return self.LastBombsDefused;
-}
-
-/**
  * Return the RD crybaby points (1)
- *
- * @return  int
  */
 public function int GetRDCryBaby()
 {
@@ -1667,19 +1031,7 @@ public function int GetRDCryBaby()
 }
 
 /**
- * Return the last saved RD crybaby points
- *
- * @return  int
- */
-public function int GetLastRDCryBaby()
-{
-    return self.LastRDCryBaby;
-}
-
-/**
  * Return the SG crybaby points (1)
- *
- * @return  int
  */
 public function int GetSGCrybaby()
 {
@@ -1691,19 +1043,7 @@ public function int GetSGCrybaby()
 }
 
 /**
- * Return the last saved SG crybaby points
- *
- * @return  int
- */
-public function int GetLastSGCryBaby()
-{
-    return self.LastSGCryBaby;
-}
-
-/**
  * Return the number of case escapes
- *
- * @return  int
  */
 public function int GetSGEscapes()
 {
@@ -1715,19 +1055,7 @@ public function int GetSGEscapes()
 }
 
 /**
- * Return the last saved number of case escapes
- *
- * @return  int
- */
-public function int GetLastSGEscapes()
-{
-    return self.LastSGEscapes;
-}
-
-/**
  * Return the number of case carrier kills
- *
- * @return  int
  */
 public function int GetSGKills()
 {
@@ -1739,19 +1067,7 @@ public function int GetSGKills()
 }
 
 /**
- * Return the last saved number of case carrier kills
- *
- * @return  int
- */
-public function int GetLastSGKills()
-{
-    return self.LastSGKills;
-}
-
-/**
  * Return the current player COOP status
- *
- * @return  enum'COOPStatus'
  */
 public function COOPStatus GetCOOPStatus()
 {
@@ -1759,403 +1075,12 @@ public function COOPStatus GetCOOPStatus()
 }
 
 /**
- * Return the last saved coop status
- *
- * @return  enum'COOPStatus'
- */
-public function COOPStatus GetLastCOOPStatus()
-{
-    return self.LastCOOPStatus;
-}
-
-/**
- * Return the time played since the last reset
- *
- * @return  float
- */
-public function float GetTimePlayed()
-{
-    return self.TimePlayed;
-}
-
-/**
- * Return time the player has spent on the server
- *
- * @return  float
- */
-public function float GetTimeTotal()
-{
-    return self.TimeTotal;
-}
-
-/**
- * Return the player score
- *
- * @return  int
- */
-public function int GetScore()
-{
-    return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetScore();
-}
-
-/**
- * Return the last saved score
- *
- * @return  int
- */
-public function int GetLastScore()
-{
-    return self.LastScore;
-}
-
-/**
- * Return number of player kills
- *
- * @return  int
- */
-public function int GetKills()
-{
-    return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetEnemyKills();
-}
-
-/**
- * Return last saved number of kills
- *
- * @return  int
- */
-public function int GetLastKills()
-{
-    return self.LastKills;
-}
-
-/**
- * Return the number of arrests
- *
- * @return  int
- */
-public function int GetArrests()
-{
-    return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetArrests();
-}
-
-/**
- * Return the last saved number of arrests
- *
- * @return  int
- */
-public function int GetLastArrests()
-{
-    return self.LastArrests;
-}
-
-/**
- * Return the current number of deaths
- *
- * @return  int
- */
-public function int GetDeaths()
-{
-    return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetTimesDied();
-}
-
-/**
- * Return the last saved number of deaths
- *
- * @return  int
- */
-public function int GetLastDeaths()
-{
-    return self.LastDeaths;
-}
-
-/**
- * Return the number of suicides
- *
- * @return  int
- */
-public function int GetSuicides()
-{
-    return self.Suicides;
-}
-
-/**
- * Increment suicide count
- *
- * @return  void
- */
-public function IncrementSuicides()
-{
-    self.Suicides++;
-}
-
-/**
- * Return the number of reported characters
- *
- * @return  int
- */
-public function int GetCharacterReports()
-{
-    return self.CharacterReports;
-}
-
-/**
- * Increment the reported characters count
- *
- * @return  void
- */
-public function IncrementCharacterReports()
-{
-    self.CharacterReports++;
-}
-
-/**
- * Return the number of civlian arrests
- *
- * @return  int
- */
-public function int GetCivilianArrests()
-{
-    return self.CivilianArrests;
-}
-
-/**
- * Increment the civilian arrests count
- *
- * @return  void
- */
-public function IncrementCivilianArrests()
-{
-    self.CivilianArrests++;
-}
-
-/**
- * Get the number of civilian hits
- *
- * @return  int
- */
-public function int GetCivilianHits()
-{
-    return self.CivilianHits;
-}
-
-/**
- * Increment the civilian hits counter
- *
- * @return  void
- */
-public function IncrementCivilianHits()
-{
-    self.CivilianHits++;
-}
-
-/**
- * Return the number of civilian incaps
- *
- * @return  int
- */
-public function int GetCivilianIncaps()
-{
-    return self.CivilianIncaps;
-}
-
-/**
- * Increment the civilian incaps counter
- *
- * @return  void
- */
-public function IncrementCivilianIncaps()
-{
-    self.CivilianIncaps++;
-}
-
-/**
- * Retur the number of civilian kills
- *
- * @return  int
- */
-public function int GetCivilianKills()
-{
-    return self.CivilianKills;
-}
-
-/**
- * Increment the civilian kills counter
- *
- * @return  void
- */
-public function IncrementCivilianKills()
-{
-    self.CivilianKills++;
-}
-
-/**
- * Return the number of enemy (AI suspects) arrests
- *
- * @return  int
- */
-public function int GetEnemyArrests()
-{
-    return self.EnemyArrests;
-}
-
-/**
- * Increment the enemy arrests counter
- *
- * @return  void
- */
-public function IncrementEnemyArrests()
-{
-    self.EnemyArrests++;
-}
-
-/**
- * Return the number of enemy incaps (valid)
- *
- * @return  int
- */
-public function int GetEnemyIncaps()
-{
-    return self.EnemyIncaps;
-}
-
-/**
- * Increment the enemy incaps counter
- *
- * @return  void
- */
-public function IncrementEnemyIncaps()
-{
-    self.EnemyIncaps++;
-}
-
-/**
- * Return the number of enemy invalid incaps
- *
- * @return  int
- */
-public function int GetEnemyIncapsInvalid()
-{
-    return self.EnemyIncapsInvalid;
-}
-
-/**
- * Increment the enemy invalid incaps counter
- *
- * @return  void
- */
-public function IncrementEnemyIncapsInvalid()
-{
-    self.EnemyIncapsInvalid++;
-}
-
-/**
- * Return the number of AI enemy kills
- *
- * @return  int
- */
-public function int GetEnemyKills()
-{
-    return self.EnemyKills;
-}
-
-/**
- * Incremement the enemy kills counter
- *
- * @return  void
- */
-public function IncrementEnemyKills()
-{
-    self.EnemyKills++;
-}
-
-/**
- * Return the number of enemy invalid kills
- *
- * @return  int
- */
-public function int GetEnemyKillsInvalid()
-{
-    return self.EnemyKillsInvalid;
-}
-
-/**
- * Increment the invalid enemy kills counter
- *
- * @return  void
- */
-public function IncrementEnemyKillsInvalid()
-{
-    self.EnemyKillsInvalid++;
-}
-
-/**
- * Return the current killstreak (since the last death)
- *
- * @return  int
- */
-public function int GetCurrentKillStreak()
-{
-    return self.CurrentKillStreak;
-}
-
-/**
- * Return the best kill streak
- *
- * @return  int
- */
-public function int GetBestKillStreak()
-{
-    return self.BestKillStreak;
-}
-
-/**
- * Return the current arrest streak (since the last death)
- *
- * @return  int
- */
-public function int GetCurrentArrestStreak()
-{
-    return self.CurrentArrestStreak;
-}
-
-/**
- * Return the best arrest strreak
- *
- * @return  int
- */
-public function int GetBestArrestStreak()
-{
-    return self.BestArrestStreak;
-}
-
-/**
- * Return the current death streak (since the last kill/arrest)
- *
- * @return  int
- */
-public function int GetCurrentDeathStreak()
-{
-    return self.CurrentDeathStreak;
-}
-
-/**
- * Return the best death streak
- *
- * @return  int
- */
-public function int GetBestDeathStreak()
-{
-    return self.BestDeathStreak;
-}
-
-/**
  * Return a Weapon class instance corresponding to the given weapon class name
  *
- * @param   string ClassName
+ * @param   ClassName
  *          Weapon class name (e.g. M4A1MG)
- * @param   optional bool bForceCreate
+ * @param   bForceCreate
  *          Indicate whether a new instance should be created on a lookup failure
- * @return  class'Weapon'
  */
 public function Weapon GetWeaponByClassName(coerce string ClassName, optional bool bForceCreate)
 {
@@ -2163,7 +1088,7 @@ public function Weapon GetWeaponByClassName(coerce string ClassName, optional bo
 
     for (i = 0; i < self.Weapons.Length; i++)
     {
-        if (self.Weapons[i].GetClassName() == ClassName)
+        if (self.Weapons[i].ClassName == ClassName)
         {
             return self.Weapons[i];
         }
@@ -2177,9 +1102,6 @@ public function Weapon GetWeaponByClassName(coerce string ClassName, optional bo
 
 /**
  * Create a new Weapon instance according to the given weapon class name
- *
- * @param   string ClassName
- * @return  class'Weapon'
  */
 protected function Weapon CreateWeapon(string ClassName)
 {
@@ -2197,13 +1119,12 @@ protected function Weapon CreateWeapon(string ClassName)
 /**
  * Queue a pawn hit
  *
- * @param   class'Pawn' Pawn
+ * @param   Pawn
  *          Pawn instance of the hit actor
- * @param   name Type
+ * @param   Type
  *          Hit type (incap, kill, etc)
- * @param   bool bThreat
+ * @param   bThreat
  *          Indicate whether the hit AI actor was a threat
- * @return  void
  */
 public function QueueHit(Pawn Pawn, eHitType Type, optional bool bThreat)
 {
@@ -2221,10 +1142,6 @@ public function QueueHit(Pawn Pawn, eHitType Type, optional bool bThreat)
 
 /**
  * Tell whether the given pawn was already hit at this moment
- *
- * @param   class'Pawn' Pawn
- * @param   name Type
- * @return  bool
  */
 public function bool HasAlreadyHit(Pawn Pawn, eHitType Type)
 {
@@ -2241,10 +1158,7 @@ public function bool HasAlreadyHit(Pawn Pawn, eHitType Type)
 }
 
 /**
- * Queue a new stun of the type Type
- *
- * @param   name Type
- * @return  void
+ * Queue a new stun of given type
  */
 protected function QueueStun(name Type)
 {
@@ -2260,11 +1174,6 @@ protected function QueueStun(name Type)
 
 /**
  * Tell whether the player has already been stun by Damager who last fired at given Time
- *
- * @param   name Type
- * @param   class'Player' Damager
- * @param   float Time
- * @return  bool
  */
 protected function bool HasAlreadyBeenStun(name Type, Player Damager, float Time)
 {
@@ -2282,9 +1191,6 @@ protected function bool HasAlreadyBeenStun(name Type, Player Damager, float Time
 
 /**
  * Tell whether the given Player instance belongs to an enemy player
- *
- * @param   class'Player' Other
- * @return  bool
  */
 public function bool IsEnemyTo(Player Other)
 {
@@ -2295,6 +1201,280 @@ public function bool IsEnemyTo(Player Other)
     }
     return !(self.GetTeam() == Other.GetTeam());
 }
+
+
+
+/** Deprecated methods **/
+
+public function string GetIPAddr()
+{
+    return self.IpAddr;
+}
+public function PlayerController GetPC()
+{
+    return self.PC;
+}
+public function Pawn GetPawn()
+{
+    return self.PC.Pawn;
+}
+public function Pawn GetLastPawn()
+{
+    return self.LastPawn;
+}
+public function Pawn GetLastValidPawn()
+{
+    return self.LastValidPawn;
+}
+public function Weapon GetLastFiredWeapon()
+{
+    return self.LastFiredWeapon;
+}
+public function SetLastFiredWeapon(Weapon Weapon)
+{
+    self.LastFiredWeapon = Weapon;
+}
+public function array<Weapon> GetWeapons()
+{
+    return self.Weapons;
+}
+public function eVoiceType GetLastVoiceType()
+{
+    return self.LastVoiceType;
+}
+public function int GetLastTeam()
+{
+    return self.LastTeam;
+}
+public function string GetLastName()
+{
+    return self.LastName;
+}
+public function bool WasDropped()
+{
+    return self.bWasDropped;
+}
+public function bool WasDead()
+{
+    return self.bWasDead;
+}
+public function bool WasVIP()
+{
+    return self.bWasVIP;
+}
+public function bool WasLoaded()
+{
+    return self.bWasLoaded;
+}
+public function bool WasAdmin()
+{
+    return self.bWasAdmin;
+}
+public function int GetLastTeamKills()
+{
+    return self.LastTeamKills;
+}
+public function int GetLastArrested()
+{
+    return self.LastArrested;
+}
+public function int GetLastVIPCaptures()
+{
+    return self.LastVIPCaptures;
+}
+public function int GetLastVIPRescues()
+{
+    return self.LastVIPRescues;
+}
+public function int GetLastVIPEscapes()
+{
+    return self.LastVIPEscapes;
+}
+public function int GetLastVIPKillsValid()
+{
+    return self.LastVIPKillsValid;
+}
+public function int GetLastVIPKillsInvalid()
+{
+    return self.LastVIPKillsInvalid;
+}
+public function int GetLastBombsDefused()
+{
+    return self.LastBombsDefused;
+}
+public function int GetLastRDCryBaby()
+{
+    return self.LastRDCryBaby;
+}
+public function int GetLastSGCryBaby()
+{
+    return self.LastSGCryBaby;
+}
+public function int GetLastSGEscapes()
+{
+    return self.LastSGEscapes;
+}
+public function int GetLastSGKills()
+{
+    return self.LastSGKills;
+}
+public function COOPStatus GetLastCOOPStatus()
+{
+    return self.LastCOOPStatus;
+}
+public function float GetTimePlayed()
+{
+    return self.TimePlayed;
+}
+public function float GetTimeTotal()
+{
+    return self.TimeTotal;
+}
+public function int GetScore()
+{
+    return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetScore();
+}
+public function int GetLastScore()
+{
+    return self.LastScore;
+}
+public function int GetKills()
+{
+    return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetEnemyKills();
+}
+public function int GetLastKills()
+{
+    return self.LastKills;
+}
+public function int GetArrests()
+{
+    return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetArrests();
+}
+public function int GetLastArrests()
+{
+    return self.LastArrests;
+}
+public function int GetDeaths()
+{
+    return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetTimesDied();
+}
+public function int GetLastDeaths()
+{
+    return self.LastDeaths;
+}
+public function int GetSuicides()
+{
+    return self.Suicides;
+}
+public function IncrementSuicides()
+{
+    self.Suicides++;
+}
+public function int GetCharacterReports()
+{
+    return self.CharacterReports;
+}
+public function IncrementCharacterReports()
+{
+    self.CharacterReports++;
+}
+public function int GetCivilianArrests()
+{
+    return self.CivilianArrests;
+}
+public function IncrementCivilianArrests()
+{
+    self.CivilianArrests++;
+}
+public function int GetCivilianHits()
+{
+    return self.CivilianHits;
+}
+public function IncrementCivilianHits()
+{
+    self.CivilianHits++;
+}
+public function int GetCivilianIncaps()
+{
+    return self.CivilianIncaps;
+}
+public function IncrementCivilianIncaps()
+{
+    self.CivilianIncaps++;
+}
+public function int GetCivilianKills()
+{
+    return self.CivilianKills;
+}
+public function IncrementCivilianKills()
+{
+    self.CivilianKills++;
+}
+public function int GetEnemyArrests()
+{
+    return self.EnemyArrests;
+}
+public function IncrementEnemyArrests()
+{
+    self.EnemyArrests++;
+}
+public function int GetEnemyIncaps()
+{
+    return self.EnemyIncaps;
+}
+public function IncrementEnemyIncaps()
+{
+    self.EnemyIncaps++;
+}
+public function int GetEnemyIncapsInvalid()
+{
+    return self.EnemyIncapsInvalid;
+}
+public function IncrementEnemyIncapsInvalid()
+{
+    self.EnemyIncapsInvalid++;
+}
+public function int GetEnemyKills()
+{
+    return self.EnemyKills;
+}
+public function IncrementEnemyKills()
+{
+    self.EnemyKills++;
+}
+public function int GetEnemyKillsInvalid()
+{
+    return self.EnemyKillsInvalid;
+}
+public function IncrementEnemyKillsInvalid()
+{
+    self.EnemyKillsInvalid++;
+}
+public function int GetCurrentKillStreak()
+{
+    return self.CurrentKillStreak;
+}
+public function int GetBestKillStreak()
+{
+    return self.BestKillStreak;
+}
+public function int GetCurrentArrestStreak()
+{
+    return self.CurrentArrestStreak;
+}
+public function int GetBestArrestStreak()
+{
+    return self.BestArrestStreak;
+}
+public function int GetCurrentDeathStreak()
+{
+    return self.CurrentDeathStreak;
+}
+public function int GetBestDeathStreak()
+{
+    return self.BestDeathStreak;
+}
+
 
 event Destroyed()
 {

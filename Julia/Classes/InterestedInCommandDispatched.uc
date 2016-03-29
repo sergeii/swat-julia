@@ -13,6 +13,5 @@ interface InterestedInCommandDispatched;
  *          User provided arguments (e.g. whois 1.2.3.4)
  * @param   class'Player' Player
  *          Owner of the dispatched command
- * @return  void
  */
 public function OnCommandDispatched(Dispatcher Dispatcher, string Name, string Id, array<string> Args, Player Player);

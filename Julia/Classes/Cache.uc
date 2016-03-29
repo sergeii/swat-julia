@@ -3,61 +3,38 @@ class Cache extends Engine.Actor;
 /**
  * Delimiter for cache entries in the Swat4DedicatedServer.ini
  * @example key $ DELIMITER $ value $ DELIMITER $ TTL
- * @type string
  */
 const DELIMITER = "\t";
 
 /**
  * Cache check rate
- * @type float
  */
 const DELTA = 30.0;
 
 
 struct sCacheEntry
 {
-    /**
-     * Cache key
-     * @type string
-     */
     var string Key;
-
-    /**
-     * Cache value
-     * @type string
-     */
     var string Value;
-
-    /**
-     * Cache entry TTL
-     * @type int
-     */
     var int TTL;
 };
 
 /**
  * An array of cache entries stored in memory
- * @type array<struct'sCacheEntry'>
  */
-var protected array<sCacheEntry> Live;
+var array<sCacheEntry> Live;
 
 /**
  * An array of cache entries stored in config
- * @type array<string>
  */
 var config array<string> Saved;
 
 /**
  * Default cache entry TTL
- * @type int
  */
 var config int TTL;
 
-/**
- * Disable the Tick event
- *
- * @return  void
- */
+
 public function PreBeginPlay()
 {
     Super.PreBeginPlay();
@@ -67,8 +44,6 @@ public function PreBeginPlay()
 /**
  * Load cache entries into memory
  * Clean up expired entries
- *
- * @return  void
  */
 public function BeginPlay()
 {
@@ -89,9 +64,6 @@ event Timer()
 
 /**
  * Retrieve cache entry value stored under provided key
- *
- * @param   string Key
- * @return  string
  */
 public function string GetValue(string Key)
 {
@@ -100,10 +72,6 @@ public function string GetValue(string Key)
 
 /**
  * Return a collection of entries stored under the same key Key
- *
- * @param   string Key
- *          Cache entry Key
- * @return  array<string>
  */
 public function array<string> GetArray(string Key)
 {
@@ -121,11 +89,7 @@ public function array<string> GetArray(string Key)
 }
 
 /**
- * Set up a cache entru with key Key and corresponding value Value
- *
- * @param   string Key
- * @param   string Value
- * @return  void
+ * Set up a cache entru with key Key and corresponding value
  */
 public function SetValue(string Key, string Value)
 {
@@ -135,12 +99,6 @@ public function SetValue(string Key, string Value)
 
 /**
  * Save a collection of values under the same key
- *
- * @param   string Key
- *          Cache entry key
- * @param   array<string> ArrayOfData
- *          Collection of data
- * @return  void
  */
 public function SetArray(string Key, array<string> Array)
 {
@@ -157,12 +115,6 @@ public function SetArray(string Key, array<string> Array)
 /**
  * Add a new cache entry with provided key and value
  * If custom TTL provided, use it. Otherwise stick to the default value
- *
- * @param   string Key
- * @param   string Value
- * @param   int TTL (optional)
- *          Optional TTL
- * @return  void
  */
 public function Append(string Key, string Value, optional int TTL)
 {
@@ -182,10 +134,6 @@ public function Append(string Key, string Value, optional int TTL)
 
 /**
  * Remove all cache entries that have been stored with the provided key
- *
- * @param   string Key
- *          Cache entry key
- * @return  void
  */
 protected function Discard(string Key)
 {
@@ -202,8 +150,6 @@ protected function Discard(string Key)
 
 /**
  * Remove the cache entries that have expired
- *
- * @return  void
  */
 protected function CheckExpiredEntries()
 {
@@ -220,8 +166,6 @@ protected function CheckExpiredEntries()
 
 /**
  * Parse and load the cached entries into memory
- *
- * @return  void
  */
 public function LoadCache()
 {
@@ -242,8 +186,6 @@ public function LoadCache()
 
 /**
  * Attempt to store memory cache entries currently stored onto disk
- *
- * @return  void
  */
 public function Commit()
 {

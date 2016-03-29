@@ -1,10 +1,9 @@
 interface InterestedInPlayerVoiceChanged;
 
 /**
- * Implement this method in order to receieve OnPlayerVoiceChanged signals
+ * Implement this method in order to receive OnPlayerVoiceChanged signals
  *
- * @param   class'Player' Player
- *          The player with a new voicetype [Player.GetVoiceType()]
- * @return  void
+ * @param   Player
+ *          The player with a new voicetype
  */
 public function OnPlayerVoiceChanged(Player Player);

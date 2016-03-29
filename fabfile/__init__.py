@@ -17,7 +17,7 @@ env.hosts = []
 
 class Settings:
     name = 'Julia'
-    version = '2.3.1'
+    version = '2.4.0-dev'
     git = 'git@git:games/swat'
     packages = [
         ('Utils', 'git@git:swat/swat-utils'),

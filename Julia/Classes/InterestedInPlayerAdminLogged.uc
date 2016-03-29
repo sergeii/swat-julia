@@ -1,10 +1,9 @@
 interface InterestedInPlayerAdminLogged;
 
 /**
- * Implement this method in order to receieve OnPlayerAdminLogged signals
+ * Implement this method in order to receive OnPlayerAdminLogged signals
  *
- * @param   class'Player' Player
+ * @param   Player
  *          The logged player
- * @return  void
  */
 public function OnPlayerAdminLogged(Player Player);

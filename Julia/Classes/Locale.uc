@@ -18,11 +18,7 @@ var config string DispatcherCommandHelp;
 var config string DispatcherUsageError;
 var config string DispatcherPermissionError;
 
-/**
- * Disable the Tick event
- *
- * @return  void
- */
+
 public function PreBeginPlay()
 {
     Super.PreBeginPlay();
@@ -31,14 +27,6 @@ public function PreBeginPlay()
 
 /**
  * Translate a property string
- *
- * @param   string Property
- * @param   string Arg1 (optional)
- * @param   string Arg2 (optional)
- * @param   string Arg3 (optional)
- * @param   string Arg4 (optional)
- * @param   string Arg5 (optional)
- * @return  string
  */
 public function string Translate(
     string Property,

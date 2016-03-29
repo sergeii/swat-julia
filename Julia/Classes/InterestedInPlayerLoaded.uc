@@ -1,10 +1,9 @@
 interface InterestedInPlayerLoaded;
 
 /**
- * Implement this method in order to receieve OnPlayerLoaded signals
+ * Implement this method in order to receive OnPlayerLoaded signals
  *
- * @param   class'Player' Player
+ * @param   Player
  *          The loaded player
- * @return  void
  */
 public function OnPlayerLoaded(Player Player);

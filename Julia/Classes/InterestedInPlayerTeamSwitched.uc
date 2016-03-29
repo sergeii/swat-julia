@@ -1,10 +1,9 @@
 interface InterestedInPlayerTeamSwitched;
 
 /**
- * Implement this method in order to receieve OnPlayerTeamSwitched signals
+ * Implement this method in order to receive OnPlayerTeamSwitched signals
  *
- * @param   class'Player' Player
- *          The team switched player [Player.GetTeam()]
- * @return  void
+ * @param   Player
+ *          The switched player
  */
 public function OnPlayerTeamSwitched(Player Player);

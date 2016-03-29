@@ -1,10 +1,9 @@
 interface InterestedInPlayerVIPSet;
 
 /**
- * Implement this method in order to receieve OnPlayerVIPSet signals
+ * Implement this method in order to receive OnPlayerVIPSet signals
  *
- * @param   class'Player' Player
- *          The new VIP player [Player.IsVIP()]
- * @return  void
+ * @param   Player
+ *          The new VIP player
  */
 public function OnPlayerVIPSet(Player Player);

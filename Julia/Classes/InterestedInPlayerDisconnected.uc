@@ -1,10 +1,9 @@
 interface InterestedInPlayerDisconnected;
 
 /**
- * Implement this method in order to receieve OnPlayerDisconnected signals
+ * Implement this method in order to receive OnPlayerDisconnected signals
  *
- * @param   class'Player' Player
+ * @param   Player
  *          The disconnected player
- * @return  void
  */
 public function OnPlayerDisconnected(Player Player);

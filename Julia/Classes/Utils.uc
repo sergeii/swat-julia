@@ -143,10 +143,7 @@ var array<float> HitPrecision_Spray;
 var array<float> HitPrecision_TripleBaton;
 
 /**
- * Return the Pawn's active item
- *
- * @param   class'Pawn' Pawn
- * @return  class'HandheldEquipment'
+ * Return Pawn's active item
  */
 static function HandheldEquipment GetActiveItem(Pawn Pawn)
 {
@@ -160,9 +157,6 @@ static function HandheldEquipment GetActiveItem(Pawn Pawn)
 
 /**
  * Tell whether there are any admins on the server
- *
- * @param   class'Engine.LevelInfo' Level
- * @return  bool
  */
 static function bool AnyAdminsOnServer(Engine.LevelInfo Level)
 {
@@ -174,10 +168,6 @@ static function bool AnyAdminsOnServer(Engine.LevelInfo Level)
 
 /**
  * Tell whether AdminMod is installed on the server
- *
- * @param   class'LevelInfo' Level
- *          Reference to the current Level instance
- * @return  bool
  */
 static function bool IsAMEnabled(Engine.LevelInfo Level)
 {
@@ -186,19 +176,18 @@ static function bool IsAMEnabled(Engine.LevelInfo Level)
 
 /**
  * Attempt to issue an admin mod command
+ * Return whether the admin command has been successfully issued
  *
- * @param   class'LevelInfo' Level
+ * @param   Level
  *          Reference to the current Level instance
- * @param   string Cmd
+ * @param   Cmd
  *          Admin command
- * @param   string AdminName
+ * @param   AdminName
  *          Admin name the command should be issued with
- * @param   string AdminIP
+ * @param   AdminIP
  *          Admin IP the command should be logged with
- * @param   string Msg (out, optional)
+ * @param   Msg (out, optional)
  *          Message returned by the underlying admin mod command handler
- * @return  bool
- *          Return whether the admin command has been successfully issued
  */
 static function bool AdminModCommand(Engine.LevelInfo Level, string Cmd, string AdminName, string AdminIP, out optional string Msg)
 {
@@ -212,8 +201,6 @@ static function bool AdminModCommand(Engine.LevelInfo Level, string Cmd, string 
 
 /**
  * Return ammo count for the given FiredWeapon instance
- *
- * @return  int
  */
 static function int GetAmmoCount(FiredWeapon FiredWeapon)
 {
@@ -231,9 +218,6 @@ static function int GetAmmoCount(FiredWeapon FiredWeapon)
 
 /**
  * Tell whether the given PlayerController instance belongs to an online player
- *
- * @param   class'PlayerController' PC
- * @return  bool
  */
 static function bool IsOnlinePlayer(Engine.LevelInfo Level, PlayerController PC)
 {
@@ -247,8 +231,6 @@ static function bool IsOnlinePlayer(Engine.LevelInfo Level, PlayerController PC)
 
 /**
  * Return filename of the map next in the rotation list
- *
- * @return  string
  */
 static function string GetNextMap(Engine.LevelInfo Level)
 {
@@ -265,9 +247,6 @@ static function string GetNextMap(Engine.LevelInfo Level)
 
 /**
  * Return friendly map name for the given filename
- *
- * @param   string Filename
- * @return  string
  */
 static function string GetFriendlyMapName(coerce string Filename)
 {
@@ -297,9 +276,6 @@ static function string GetFriendlyMapName(coerce string Filename)
 
 /**
  * Return grenade class name corresponding to the given projectile class name
- *
- * @param   string ProjectileClassName
- * @return  string
  */
 static function string GetGrenadeClassName(coerce string ProjectileClassName)
 {
@@ -317,9 +293,6 @@ static function string GetGrenadeClassName(coerce string ProjectileClassName)
 
 /**
  * Return whether the given equipment item class name belongs to the grenade list
- *
- * @param   string ItemName
- * @return  bool
  */
 static function bool IsGrenade(string ItemName)
 {
@@ -328,9 +301,6 @@ static function bool IsGrenade(string ItemName)
 
 /**
  * Return the equipment item class name corresponding to its equipment item class name
- *
- * @param   string ItemClassName
- * @return  string
  */
 static function string GetItemFriendlyName(coerce string ItemClassName)
 {
@@ -348,9 +318,6 @@ static function string GetItemFriendlyName(coerce string ItemClassName)
 
 /**
  * Remove unsafe characters from a string
- *
- * @param   string String
- * @return  string
  */
 static function string EscapeString(string String)
 {
@@ -366,9 +333,6 @@ static function string EscapeString(string String)
 
 /**
  * Return hit precision error for the given weapon category
- *
- * @param   name Type
- * @return  array<float[2]>
  */
 static function array<float> GetHitPrecision(name Type)
 {
@@ -399,9 +363,6 @@ static function array<float> GetHitPrecision(name Type)
 
 /**
  * Return an array of stun weapons corresponding to the given stun type
- *
- * @param   name Type
- * @return  array<string>
  */
 public static function array<string> GetStunWeapons(name Type)
 {
@@ -431,13 +392,12 @@ public static function array<string> GetStunWeapons(name Type)
 /**
  * Return the player name painted with team matching color
  *
- * @param   string Name
+ * @param   Name
  *          Original name
- * @param   int int Team
+ * @param   Team
  *          Team number (0 - SWAT, 1 - Suspects)
- * @param   bool bVIP (optional)
- *          Indicate whether the name should be painted green
- * @return  string
+ * @param   bVIP (optional)
+ *          Whether the name should be painted green
  */
 static function string GetTeamColoredName(string Name, int Team, optional bool bVIP)
 {
@@ -459,9 +419,6 @@ static function string GetTeamColoredName(string Name, int Team, optional bool b
 
 /**
  * Tell whether given name contains (SPEC) or (VIEW) suffix
- *
- * @param   string Name
- * @return  bool
  */
 static function bool IsSpectatorName(string Name)
 {
