@@ -21,6 +21,7 @@ class Settings:
     git = 'git@git:games/swat'
     packages = [
         ('Utils', 'git@git:swat/swat-utils'),
+        ('HTTP', 'git@git:swat/swat-http'),
         ('Julia', 'git@git:swat/swat-julia'),
     ]
     mods = [
