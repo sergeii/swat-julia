@@ -227,6 +227,5 @@ event Destroyed()
 defaultproperties
 {
     Title="Julia/Whois";
-    Version="1.0.0";
     LocaleClass=class'WhoisLocale';
 }

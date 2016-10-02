@@ -277,7 +277,6 @@ event Destroyed()
 defaultproperties
 {
     Title="Julia/Chatbot";
-    Version="1.1.0-dev";
     LocaleClass=class'ChatbotLocale';
 
     ReplyThreshold=2.0;

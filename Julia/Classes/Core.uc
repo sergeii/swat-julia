@@ -85,6 +85,7 @@ public function BeginPlay()
     // Init builtin extensions
     InitExtension(Spawn(class'Admin'));
     InitExtension(Spawn(class'Chatbot'));
+    InitExtension(Spawn(class'Tracker'));
 
     log("Julia (version " $ class'Core'.const.VERSION $ ") has been initialized");
 }
