@@ -88,6 +88,7 @@ public function BeginPlay()
     InitExtension(Spawn(class'Tracker'));
     InitExtension(Spawn(class'Whois'));
     InitExtension(Spawn(class'VIP'));
+    InitExtension(Spawn(class'COOP'));
 
     log("Julia (version " $ class'Core'.const.VERSION $ ") has been initialized");
 }
