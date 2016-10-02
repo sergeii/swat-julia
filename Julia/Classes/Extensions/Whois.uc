@@ -103,7 +103,7 @@ public function OnCommandDispatched(Dispatcher Dispatcher, string Name, string I
         }
         // Prepend name and ip delimited by a tab character to the arg list
         Args.Insert(0, 1);
-        Args[0] = MatchedPlayer.GetName() $ "\t" $ MatchedPlayer.GetIpAddr();
+        Args[0] = MatchedPlayer.GetName() $ "\t" $ MatchedPlayer.IpAddr;
     }
 
     ArgsCombined = class'Utils.ArrayUtils'.static.Join(Args, " ");
@@ -124,7 +124,7 @@ public function OnPlayerConnected(Player Player)
     {
         return;
     }
-    SendCommandRequest("whois", Player.GetName() $ "\t" $ Player.GetIpAddr(), "!");
+    SendCommandRequest("whois", Player.GetName() $ "\t" $ Player.IpAddr, "!");
 }
 
 public function OnRequestSuccess(int StatusCode, string Response, string Hostname, int Port)
@@ -199,7 +199,7 @@ protected function SendCommandRequest(string Command, string Args, string Id, op
     if (Player != None)
     {
         PlayerName = Player.GetName();
-        PlayerIP = Player.GetIPAddr();
+        PlayerIP = Player.IPAddr;
     }
     Message.AddQueryString(eRequestKey.RK_PLAYER_NAME, PlayerName);
     Message.AddQueryString(eRequestKey.RK_PLAYER_IP, PlayerIP);

@@ -958,81 +958,72 @@ public function bool IsSpectator()
     );
 }
 
-/**
- * Return the current number of teamkills
- */
+
+public function int GetScore()
+{
+    return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetScore();
+}
+
+public function int GetKills()
+{
+    return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetEnemyKills();
+}
+
+public function int GetArrests()
+{
+    return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetArrests();
+}
+
+public function int GetDeaths()
+{
+    return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetTimesDied();
+}
+
 public function int GetTeamKills()
 {
     return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetFriendlyKills();
 }
 
-/**
- * Return the number of times arrested
- */
 public function int GetArrested()
 {
     return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetTimesArrested();
 }
 
-/**
- * Return the number of VIP captures
- */
 public function int GetVIPCaptures()
 {
     return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetArrestedVIP();
 }
 
-/**
- * Return the last number of vip rescues
- */
 public function int GetVIPRescues()
 {
     return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetUnarrestedVIP();
 }
 
-/**
- * Return the number of vip escapes
- */
 public function int GetVIPEscapes()
 {
     return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetVIPPlayerEscaped();
 }
 
-/**
- * Return the number of valid VIP kills
- */
 public function int GetVIPKillsValid()
 {
     return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetKilledVIPValid();
 }
 
-/**
- * Return the number of invalid VIP kills
- */
 public function int GetVIPKillsInvalid()
 {
     return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetKilledVIPInvalid();
 }
 
-/**
- * Return the number of defused bombs
- */
 public function int GetBombsDefused()
 {
     return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetBombsDiffused();
 }
 
-/**
- * Return the RD crybaby points (1)
- */
 public function int GetRDCryBaby()
 {
     return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetRDCrybaby();
 }
 
-/**
- * Return the SG crybaby points (1)
- */
 public function int GetSGCrybaby()
 {
     #if IG_SPEECH_RECOGNITION
@@ -1042,9 +1033,6 @@ public function int GetSGCrybaby()
     #endif
 }
 
-/**
- * Return the number of case escapes
- */
 public function int GetSGEscapes()
 {
     #if IG_SPEECH_RECOGNITION
@@ -1054,9 +1042,6 @@ public function int GetSGEscapes()
     #endif
 }
 
-/**
- * Return the number of case carrier kills
- */
 public function int GetSGKills()
 {
     #if IG_SPEECH_RECOGNITION
@@ -1076,11 +1061,6 @@ public function COOPStatus GetCOOPStatus()
 
 /**
  * Return a Weapon class instance corresponding to the given weapon class name
- *
- * @param   ClassName
- *          Weapon class name (e.g. M4A1MG)
- * @param   bForceCreate
- *          Indicate whether a new instance should be created on a lookup failure
  */
 public function Weapon GetWeaponByClassName(coerce string ClassName, optional bool bForceCreate)
 {
@@ -1108,7 +1088,7 @@ protected function Weapon CreateWeapon(string ClassName)
     local Weapon Weapon;
 
     Weapon = Spawn(class'Weapon');
-    Weapon.SetClassName(ClassName);
+    Weapon.ClassName = ClassName;
     Weapon.Init(self);
 
     self.Weapons[self.Weapons.Length] = Weapon;
@@ -1118,13 +1098,6 @@ protected function Weapon CreateWeapon(string ClassName)
 
 /**
  * Queue a pawn hit
- *
- * @param   Pawn
- *          Pawn instance of the hit actor
- * @param   Type
- *          Hit type (incap, kill, etc)
- * @param   bThreat
- *          Indicate whether the hit AI actor was a threat
  */
 public function QueueHit(Pawn Pawn, eHitType Type, optional bool bThreat)
 {
@@ -1200,279 +1173,6 @@ public function bool IsEnemyTo(Player Other)
         return false;
     }
     return !(self.GetTeam() == Other.GetTeam());
-}
-
-
-
-/** Deprecated methods **/
-
-public function string GetIPAddr()
-{
-    return self.IpAddr;
-}
-public function PlayerController GetPC()
-{
-    return self.PC;
-}
-public function Pawn GetPawn()
-{
-    return self.PC.Pawn;
-}
-public function Pawn GetLastPawn()
-{
-    return self.LastPawn;
-}
-public function Pawn GetLastValidPawn()
-{
-    return self.LastValidPawn;
-}
-public function Weapon GetLastFiredWeapon()
-{
-    return self.LastFiredWeapon;
-}
-public function SetLastFiredWeapon(Weapon Weapon)
-{
-    self.LastFiredWeapon = Weapon;
-}
-public function array<Weapon> GetWeapons()
-{
-    return self.Weapons;
-}
-public function eVoiceType GetLastVoiceType()
-{
-    return self.LastVoiceType;
-}
-public function int GetLastTeam()
-{
-    return self.LastTeam;
-}
-public function string GetLastName()
-{
-    return self.LastName;
-}
-public function bool WasDropped()
-{
-    return self.bWasDropped;
-}
-public function bool WasDead()
-{
-    return self.bWasDead;
-}
-public function bool WasVIP()
-{
-    return self.bWasVIP;
-}
-public function bool WasLoaded()
-{
-    return self.bWasLoaded;
-}
-public function bool WasAdmin()
-{
-    return self.bWasAdmin;
-}
-public function int GetLastTeamKills()
-{
-    return self.LastTeamKills;
-}
-public function int GetLastArrested()
-{
-    return self.LastArrested;
-}
-public function int GetLastVIPCaptures()
-{
-    return self.LastVIPCaptures;
-}
-public function int GetLastVIPRescues()
-{
-    return self.LastVIPRescues;
-}
-public function int GetLastVIPEscapes()
-{
-    return self.LastVIPEscapes;
-}
-public function int GetLastVIPKillsValid()
-{
-    return self.LastVIPKillsValid;
-}
-public function int GetLastVIPKillsInvalid()
-{
-    return self.LastVIPKillsInvalid;
-}
-public function int GetLastBombsDefused()
-{
-    return self.LastBombsDefused;
-}
-public function int GetLastRDCryBaby()
-{
-    return self.LastRDCryBaby;
-}
-public function int GetLastSGCryBaby()
-{
-    return self.LastSGCryBaby;
-}
-public function int GetLastSGEscapes()
-{
-    return self.LastSGEscapes;
-}
-public function int GetLastSGKills()
-{
-    return self.LastSGKills;
-}
-public function COOPStatus GetLastCOOPStatus()
-{
-    return self.LastCOOPStatus;
-}
-public function float GetTimePlayed()
-{
-    return self.TimePlayed;
-}
-public function float GetTimeTotal()
-{
-    return self.TimeTotal;
-}
-public function int GetScore()
-{
-    return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetScore();
-}
-public function int GetLastScore()
-{
-    return self.LastScore;
-}
-public function int GetKills()
-{
-    return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetEnemyKills();
-}
-public function int GetLastKills()
-{
-    return self.LastKills;
-}
-public function int GetArrests()
-{
-    return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetArrests();
-}
-public function int GetLastArrests()
-{
-    return self.LastArrests;
-}
-public function int GetDeaths()
-{
-    return SwatPlayerReplicationInfo(self.PC.PlayerReplicationInfo).netScoreInfo.GetTimesDied();
-}
-public function int GetLastDeaths()
-{
-    return self.LastDeaths;
-}
-public function int GetSuicides()
-{
-    return self.Suicides;
-}
-public function IncrementSuicides()
-{
-    self.Suicides++;
-}
-public function int GetCharacterReports()
-{
-    return self.CharacterReports;
-}
-public function IncrementCharacterReports()
-{
-    self.CharacterReports++;
-}
-public function int GetCivilianArrests()
-{
-    return self.CivilianArrests;
-}
-public function IncrementCivilianArrests()
-{
-    self.CivilianArrests++;
-}
-public function int GetCivilianHits()
-{
-    return self.CivilianHits;
-}
-public function IncrementCivilianHits()
-{
-    self.CivilianHits++;
-}
-public function int GetCivilianIncaps()
-{
-    return self.CivilianIncaps;
-}
-public function IncrementCivilianIncaps()
-{
-    self.CivilianIncaps++;
-}
-public function int GetCivilianKills()
-{
-    return self.CivilianKills;
-}
-public function IncrementCivilianKills()
-{
-    self.CivilianKills++;
-}
-public function int GetEnemyArrests()
-{
-    return self.EnemyArrests;
-}
-public function IncrementEnemyArrests()
-{
-    self.EnemyArrests++;
-}
-public function int GetEnemyIncaps()
-{
-    return self.EnemyIncaps;
-}
-public function IncrementEnemyIncaps()
-{
-    self.EnemyIncaps++;
-}
-public function int GetEnemyIncapsInvalid()
-{
-    return self.EnemyIncapsInvalid;
-}
-public function IncrementEnemyIncapsInvalid()
-{
-    self.EnemyIncapsInvalid++;
-}
-public function int GetEnemyKills()
-{
-    return self.EnemyKills;
-}
-public function IncrementEnemyKills()
-{
-    self.EnemyKills++;
-}
-public function int GetEnemyKillsInvalid()
-{
-    return self.EnemyKillsInvalid;
-}
-public function IncrementEnemyKillsInvalid()
-{
-    self.EnemyKillsInvalid++;
-}
-public function int GetCurrentKillStreak()
-{
-    return self.CurrentKillStreak;
-}
-public function int GetBestKillStreak()
-{
-    return self.BestKillStreak;
-}
-public function int GetCurrentArrestStreak()
-{
-    return self.CurrentArrestStreak;
-}
-public function int GetBestArrestStreak()
-{
-    return self.BestArrestStreak;
-}
-public function int GetCurrentDeathStreak()
-{
-    return self.CurrentDeathStreak;
-}
-public function int GetBestDeathStreak()
-{
-    return self.BestDeathStreak;
 }
 
 

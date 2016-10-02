@@ -804,26 +804,6 @@ public function int GetRoundTimeLimit()
 }
 
 
-/** Deprecated methods **/
-
-public function array<Player> GetPlayers()
-{
-    return self.Players;
-}
-public function eSwatRoundOutcome GetOutcome()
-{
-    return self.Outcome;
-}
-public function float GetTimePlayed()
-{
-    return self.TimePlayed;
-}
-public function float GetTimeTotal()
-{
-    return self.TimeTotal;
-}
-
-
 event Destroyed()
 {
     SwatGameInfo(Level.Game).GameEvents.PawnDamaged.UnRegister(self);

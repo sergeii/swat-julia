@@ -379,14 +379,14 @@ function AddPlayerDetails(HTTP.Message Request)
     {
         Player = Core.Server.Players[i];
         // Instance has been created, but not filled with actual data (rare)
-        if (Player.GetLastTeam() == -1)
+        if (Player.LastTeam == -1)
         {
             continue;
         }
         // Player ID
         AddRequestItem(Request, i, "", eRootKey.RK_PLAYERS, i, ePlayerKey.PK_ID);
         // IP address
-        AddRequestItem(Request, Player.GetIPAddr(), "", eRootKey.RK_PLAYERS, i, ePlayerKey.PK_IP);
+        AddRequestItem(Request, Player.IPAddr, "", eRootKey.RK_PLAYERS, i, ePlayerKey.PK_IP);
         // Has the player left the server? (default 0)
         AddRequestItem(Request, int(Player.bWasDropped), "0", eRootKey.RK_PLAYERS, i, ePlayerKey.PK_DROPPED);
         // Is the player an admin? (default 0)

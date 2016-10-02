@@ -555,34 +555,6 @@ public function TriggerOnPlayerVoiceChanged(Player Player)
 }
 
 
-/** Deprecated methods **/
-
-public function Cache GetCache()
-{
-    return self.Cache;
-}
-public function Locale GetLocale()
-{
-    return self.Locale;
-}
-public function BroadcastHandler GetBroadcastHandler()
-{
-    return self.BroadcastHandler;
-}
-public function Dispatcher GetDispatcher()
-{
-    return self.Dispatcher;
-}
-public function Server GetServer()
-{
-    return self.Server;
-}
-public function array<Player> GetPlayers()
-{
-    return self.Server.GetPlayers();
-}
-
-
 event Destroyed()
 {
     self.InterestedInEventBroadcast.Remove(0, self.InterestedInEventBroadcast.Length);

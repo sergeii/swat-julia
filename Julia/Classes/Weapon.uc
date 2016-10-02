@@ -124,67 +124,6 @@ public function bool IsGrenade()
     return class'Utils'.static.IsGrenade(self.ClassName);
 }
 
-
-/** Deprecated methods **/
-
-public function float GetBestKillDistance()
-{
-    return self.BestKillDistance;
-}
-public function string GetClassName()
-{
-    return self.ClassName;
-}
-public function float GetTimeUsed()
-{
-    return self.TimeUsed;
-}
-public function int GetShots()
-{
-    return self.Shots;
-}
-public function int GetHits()
-{
-    return self.Hits;
-}
-public function int GetTeamHits()
-{
-    return self.TeamHits;
-}
-public function int GetKills()
-{
-    return self.Kills;
-}
-public function int GetTeamKills()
-{
-    return self.TeamKills;
-}
-public function SetClassName(string Name)
-{
-    self.ClassName = Name;
-}
-public function IncrementHits()
-{
-    self.Hits++;
-}
-public function IncrementTeamHits()
-{
-    self.TeamHits++;
-}
-public function IncrementKills()
-{
-    self.Kills++;
-}
-public function IncrementTeamKills()
-{
-    self.TeamKills++;
-}
-public function float GetLastFiredTime()
-{
-    return self.LastFiredTime;
-}
-
-
 event Destroyed()
 {
     self.Player = None;

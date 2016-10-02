@@ -346,7 +346,7 @@ public function OnPlayerAdminLogged(Player Player)
     // Let other admins see the log in
     class'Utils.LevelUtils'.static.TellAdmins(
         Level,
-        Locale.Translate("AdminLoginMessage", Player.GetName(), Player.GetIpAddr()),
+        Locale.Translate("AdminLoginMessage", Player.GetName(), Player.IpAddr),
         Player.PC
     );
 }
@@ -844,7 +844,7 @@ protected function bool IsPlayerAuthenticated(Player Player, sProtectedName Prot
 
     for (i = 0; i < Cached.Length; i++)
     {
-        if (Cached[i] == (ProtectedName.Name $ CACHE_AUTH_DELIMITER $ Player.GetIpAddr()))
+        if (Cached[i] == (ProtectedName.Name $ CACHE_AUTH_DELIMITER $ Player.IpAddr))
         {
             log(self $ ": found a " $ Cached[i] $ " entry matching " $ Player.GetName());
             return true;
@@ -860,7 +860,7 @@ protected function bool IsPlayerAuthenticated(Player Player, sProtectedName Prot
 protected function AuthenticatePlayer(Player Player, sProtectedName ProtectedName)
 {
     Core.Cache.Append(CACHE_AUTH_KEY,
-                      ProtectedName.Name $ CACHE_AUTH_DELIMITER $ Player.GetIpAddr());
+                      ProtectedName.Name $ CACHE_AUTH_DELIMITER $ Player.IpAddr);
     // Also drop queued actions
     DropDelayedAction(Player, "ProtectNames");
 }
