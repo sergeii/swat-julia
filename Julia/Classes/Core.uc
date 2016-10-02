@@ -87,6 +87,7 @@ public function BeginPlay()
     InitExtension(Spawn(class'Chatbot'));
     InitExtension(Spawn(class'Tracker'));
     InitExtension(Spawn(class'Whois'));
+    InitExtension(Spawn(class'Stats'));
     InitExtension(Spawn(class'VIP'));
     InitExtension(Spawn(class'COOP'));
 
