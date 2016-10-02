@@ -86,6 +86,8 @@ public function BeginPlay()
     InitExtension(Spawn(class'Admin'));
     InitExtension(Spawn(class'Chatbot'));
     InitExtension(Spawn(class'Tracker'));
+    InitExtension(Spawn(class'Whois'));
+    InitExtension(Spawn(class'VIP'));
 
     log("Julia (version " $ class'Core'.const.VERSION $ ") has been initialized");
 }
@@ -574,7 +576,10 @@ event Destroyed()
 
     while (BuiltinExtensions.Length > 0)
     {
-        BuiltinExtensions[0].Destroy();
+        if (BuiltinExtensions[0] != None)
+        {
+            BuiltinExtensions[0].Destroy();
+        }
         BuiltinExtensions.Remove(0, 1);
     }
 
