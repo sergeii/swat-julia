@@ -21,6 +21,7 @@ var BroadcastHandler BroadcastHandler;
 var Dispatcher Dispatcher;
 var Server Server;
 
+var array<Extension> BuiltinExtensions;
 var array<InterestedInEventBroadcast> InterestedInEventBroadcast;
 var array<InterestedInInternalEventBroadcast> InterestedInInternalEventBroadcast;
 var array<InterestedInGameStateChanged> InterestedInGameStateChanged;
@@ -81,7 +82,15 @@ public function BeginPlay()
         "version", self, self.Locale.Translate("CoreVersionUsage"), self.Locale.Translate("CoreVersionDescription")
     );
 
+    // Init builtin extensions
+    InitExtension(Spawn(class'Admin'));
+
     log("Julia (version " $ class'Core'.const.VERSION $ ") has been initialized");
+}
+
+function InitExtension(Extension Extension)
+{
+    BuiltinExtensions[BuiltinExtensions.Length] = Extension;
 }
 
 /**
@@ -588,6 +597,12 @@ event Destroyed()
     self.InterestedInPlayerVIPSet.Remove(0, self.InterestedInPlayerVIPSet.Length);
     self.InterestedInPlayerPawnChanged.Remove(0, self.InterestedInPlayerPawnChanged.Length);
     self.InterestedInPlayerVoiceChanged.Remove(0, self.InterestedInPlayerVoiceChanged.Length);
+
+    while (BuiltinExtensions.Length > 0)
+    {
+        BuiltinExtensions[0].Destroy();
+        BuiltinExtensions.Remove(0, 1);
+    }
 
     if (self.Cache != None)
     {
