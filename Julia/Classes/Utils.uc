@@ -961,11 +961,11 @@ defaultproperties
     StunWeapons_TripleBaton=("HK69GrenadeLauncher");
 
     HitPrecision_Lethal=(-0.75,1.5);    // 1.5 is for grenade launcher
-    HitPrecision_Taser=(-0.5,0.5);
-    HitPrecision_LessLethalSG=(-0.5,0.5);
-    HitPrecision_Flashbang=(0.0,0.5);
-    HitPrecision_Stinger=(0.0,0.5);
+    HitPrecision_Taser=(-0.75,0.75);
+    HitPrecision_LessLethalSG=(-0.75,0.75);
+    HitPrecision_Flashbang=(0.0,0.75);
+    HitPrecision_Stinger=(0.0,0.75);
     HitPrecision_Gas=(0.0,0.0);
-    HitPrecision_Spray=(-0.5,0.5);
-    HitPrecision_TripleBaton=(-0.5,1.5);
+    HitPrecision_Spray=(-0.75,0.75);
+    HitPrecision_TripleBaton=(-0.75,1.5);
 }
