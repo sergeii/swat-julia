@@ -7,7 +7,7 @@ import enum eSwatGameState from SwatGame.SwatGUIConfig;
 /**
  * Package version
  */
-const VERSION = "2.4.0-dev";
+const VERSION = "3.0.0-dev";
 
 /**
  * Fixed tick rate (seconds)
@@ -616,4 +616,9 @@ event Destroyed()
     }
 
     Super.Destroyed();
+}
+
+defaultproperties
+{
+    Enabled=true;
 }
