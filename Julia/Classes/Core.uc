@@ -7,7 +7,7 @@ import enum eSwatGameState from SwatGame.SwatGUIConfig;
 /**
  * Package version
  */
-const VERSION = "3.0.0-dev";
+const VERSION = "3.0-dev";
 
 /**
  * Fixed tick rate (seconds)
