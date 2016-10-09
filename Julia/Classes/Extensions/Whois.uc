@@ -229,4 +229,7 @@ defaultproperties
 {
     Title="Julia/Whois";
     LocaleClass=class'WhoisLocale';
+    AutoWhois=True;
+    URL="http://swat4stats.com/api/whois/";
+    Key="swat4stats";
 }
