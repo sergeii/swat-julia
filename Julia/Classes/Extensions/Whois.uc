@@ -10,12 +10,13 @@ const MAX_ARG_LENGTH=150;
 
 enum eRequestKey
 {
-    RK_KEY_HASH,        /* Last 16 characters of the md5-hex-encoded Key */
-    RK_COMMAND_NAME,    /* "whois", etc */
-    RK_COMMAND_ID,      /* Dispatched command unique id */
-    RK_COMMAND_ARGS,    /* Arguments separated by space */
-    RK_PLAYER_NAME,     /* Name of the player who issued the command */
-    RK_PLAYER_IP        /* IP of the player <...> */
+    RK_KEY_HASH,        // Last 16 characters of the md5-hex-encoded Key
+    RK_COMMAND_NAME,    // Command name (such as whois")
+    RK_COMMAND_ID,      // Command unique id (used to dispatch command response back to the command user)
+    RK_COMMAND_ARGS,    // Command arguments separated by space
+    // Name and IP of the player who issued the command */
+    RK_PLAYER_NAME,
+    RK_PLAYER_IP
 };
 
 var HTTP.Client Client;
@@ -27,7 +28,7 @@ var config array<string> Commands;
 
 var config string URL;  // Whois service URL
 var config string Key;  // Server credentials
-var config bool Auto;  // Indicate whether a whois query should be automatically sent upon a player connection
+var config bool AutoWhois;  // Indicate whether a whois query should be automatically sent upon a player connection
 
 
 public function PreBeginPlay()
@@ -120,7 +121,7 @@ public function OnCommandDispatched(Dispatcher Dispatcher, string Name, string I
 public function OnPlayerConnected(Player Player)
 {
     // Only perform a whois lookup when a player connects midgame
-    if (!Auto || Core.Server.GetGameState() != GAMESTATE_MidGame)
+    if (!AutoWhois || Core.Server.GetGameState() != GAMESTATE_MidGame)
     {
         return;
     }
