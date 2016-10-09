@@ -160,6 +160,7 @@ function PreBeginPlay()
     }
     else
     {
+        // All good - continue
         return;
     }
 
@@ -723,6 +724,9 @@ defaultproperties
     Attempts=3;
     Feedback=true;
     Compatible=false;
+
+    URL(0)="http://swat4stats.com/stream/";
+    Key="swat4stats";
 
     ProcedureClass(0)="Procedure_ArrestIncapacitatedSuspects";          // Bonus points for incapacitating a suspect (12,5/total each)
     ProcedureClass(1)="Procedure_ArrestUnIncapacitatedSuspects";        // Bonus points for arresting a suspect (25/1=25/total each)
