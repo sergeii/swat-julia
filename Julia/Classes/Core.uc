@@ -12,7 +12,7 @@ const VERSION = "3.0-dev";
 /**
  * Fixed tick rate (seconds)
  */
-const DELTA = 0.75;
+const DELTA = 0.5;
 
 
 var Cache Cache;
