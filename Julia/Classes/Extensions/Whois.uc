@@ -103,11 +103,12 @@ public function OnCommandDispatched(Dispatcher Dispatcher, string Name, string I
             return;
         }
         // Prepend name and ip delimited by a tab character to the arg list
-        Args.Insert(0, 1);
-        Args[0] = MatchedPlayer.GetName() $ "\t" $ MatchedPlayer.IpAddr;
+        ArgsCombined = MatchedPlayer.GetName() $ "\t" $ MatchedPlayer.IpAddr;
     }
-
-    ArgsCombined = class'Utils.ArrayUtils'.static.Join(Args, " ");
+    else
+    {
+        ArgsCombined = class'Utils.ArrayUtils'.static.Join(Args, " ");
+    }
 
     if (Len(ArgsCombined) > MAX_ARG_LENGTH)
     {
